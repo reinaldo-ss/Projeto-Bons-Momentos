@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bons Momentos - Motoboys</title>
+
+    <!--Importações-->
+    <script src="../javascript/script.js" defer></script>
+    <link rel="stylesheet" href="../css/styleGlobal.css">
+    <link rel="stylesheet" href="../css/styleAdmin.css">
+
+</head>
+<body>
+    <!-- Cabeçalho do administrador -->
+    <section id="secao-header-admin" class="cor_fundo">
+        <header class="cabecalho-admin content-section">
+            <div class="orientacao-logo-admin">
+                <img src="./img/logo-vm-branco.png" onerror="this.onerror=null; this.src='../img/logo-vm-branco.png';" class="logo" alt="Logo Bons Momentos">
+                <div>
+                    <h3>Bons Momentos</h3>
+                    <p>Painel Administrativo</p>
+                </div>
+            </div>
+
+            <div class="admin-usuario">
+                <div class="admin-identidade">
+                    <span class="admin-avatar">A</span>
+                    <div class="admin-info">
+                        <p class="admin-nome">Administrador</p>
+                        <p class="admin-cargo">Acesso total</p>
+                    </div>
+                </div>
+                <button class="btn-sair" onclick="fazerLogout()">Sair</button>
+            </div>
+        </header>
+    </section>
+
+    <!-- Subnavegação do administrador -->
+    <section class="admin-subnav-section">
+        <div class="content-section admin-subnav">
+            <nav class="admin-nav">
+                <a class="admin-nav-link" onclick="carregarPagina('admin')">Cardápio</a>
+                <a class="admin-nav-link ativo" onclick="carregarPagina('motoboys')">Motoboys</a>
+                <a class="admin-nav-link" onclick="carregarPagina('historicoPedidos')">Histórico de Pedidos</a>
+            </nav>
+            <div class="admin-nav-acoes">
+                <a class="btn-admin-cadastrar" onclick="carregarPagina('cadastrarReceita')">+ Cadastrar Receita</a>
+                <a class="btn-admin-cadastrar" onclick="carregarPagina('cadastrarMotoBoys')">+ Cadastrar Motoboys</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Conteúdo principal -->
+    <section>
+        <div class="content-section admin-conteudo">
+            <div class="admin-topo">
+                <div>
+                    <p class="admin-titulo">Motoboys</p>
+                    <p class="admin-subtitulo">Gerencie a equipe de entregadores da confeitaria</p>
+                </div>
+            </div>
+
+            <!-- Barra de ações -->
+            <div class="admin-acoes">
+                <button class="btn-novo-receita" onclick="novoMotoboy()">+ Novo motoboy</button>
+            </div>
+
+            <!-- Tabela de motoboys -->
+            <div class="admin-tabela-wrapper">
+                <table class="admin-tabela">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>E-mail</th>
+                            <th>Senha</th>
+                            <th>Data de Nascimento</th>
+                            <th>CEP</th>
+                            <th>Endereço</th>
+                            <th>Cidade</th>
+                            <th>Bairro</th>
+                            <th>Número</th>
+                            <th>Complemento</th>
+                            <th>Telefone</th>
+                            <th>Tipo de Usuário</th>
+                            <th class="col-acoes">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="corpo-tabela-motoboys">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Carrega a tabela ao abrir esta página diretamente (fora do fluxo da SPA) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof carregarTabelaMotoboys === 'function') carregarTabelaMotoboys();
+        });
+    </script>
+</body>
+</html>

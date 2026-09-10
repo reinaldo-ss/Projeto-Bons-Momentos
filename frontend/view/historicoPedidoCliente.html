@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bons Momentos - Meus Pedidos</title>
+
+    <!--Importações-->
+    <script src="../javascript/script.js" defer></script>
+    <link rel="stylesheet" href="../css/styleHistoricoCliente.css">
+    <link rel="stylesheet" href="../css/styleGlobal.css">
+
+</head>
+<body>
+    <section>
+        <div class="content-section pedidos-cliente-conteudo">
+
+            <div class="pedidos-cliente-topo">
+                <p class="pedidos-cliente-titulo">Meus Pedidos</p>
+                <p class="pedidos-cliente-subtitulo">Acompanhe o histórico das suas compras na Bons Momentos</p>
+            </div>
+
+            <div class="pedidos-cliente-lista" id="lista-pedidos-cliente">
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Carrega os pedidos ao abrir esta página diretamente (fora do fluxo da SPA) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof carregarPedidosCliente === 'function') carregarPedidosCliente();
+        });
+    </script>
+</body>
+</html>

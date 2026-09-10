@@ -1,0 +1,266 @@
+/* ===== Página Finalizar Compra ===== */
+
+.compra-container {
+    padding: 30px 20px 60px 20px;
+}
+
+.compra-titulo {
+    font-size: 24px;
+    color: var(--bm-marrom-escuro);
+    margin-bottom: 20px;
+}
+
+.compra-grid {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 20px;
+    align-items: start;
+}
+
+.compra-coluna-principal {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+}
+
+.compra-coluna-lateral {
+    min-width: 0;
+}
+
+/* ----- Cartões genéricos ----- */
+.compra-card {
+    background: #fff;
+    border: 1px solid #e4e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.compra-card-titulo {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--bm-marrom-escuro);
+    margin: 0 0 14px 0;
+}
+
+/* ----- Resumo do produto ----- */
+.compra-produto {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #eef1f6;
+}
+
+.compra-produto-foto {
+    width: 72px;
+    height: 72px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.compra-produto-nome {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--bm-marrom-escuro);
+    margin: 0 0 4px 0;
+}
+
+.compra-produto-preco {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--bm-marrom-medio);
+    margin: 0;
+}
+
+.compra-observacao {
+    padding-top: 16px;
+}
+
+.compra-observacao label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--bm-marrom-escuro);
+    margin-bottom: 8px;
+}
+
+.compra-observacao textarea {
+    width: 100%;
+    background: #f4f6f8;
+    border: 1px solid #e8edf2;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 14px;
+    color: #0f172a;
+    font-family: inherit;
+    outline: none;
+    resize: vertical;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+.compra-observacao textarea:focus {
+    border-color: var(--bm-terracota);
+}
+
+/* ----- Endereço de entrega ----- */
+.compra-endereco {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: #f9fafb;
+    border: 1px solid #eef1f6;
+    border-radius: 10px;
+    padding: 14px;
+}
+
+.compra-endereco-icone {
+    font-size: 18px;
+    line-height: 1.4;
+}
+
+.compra-endereco-texto {
+    font-size: 14px;
+    color: #334155;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* ----- Forma de pagamento ----- */
+.compra-pagamento-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.compra-pagamento-topo .compra-card-titulo {
+    margin: 0;
+}
+
+.compra-pagamento-selo {
+    background: var(--bm-rosa-suave);
+    color: var(--bm-marrom-escuro);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 5px 12px;
+    border-radius: 20px;
+}
+
+.compra-opcao-pagamento {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 4px;
+    border-bottom: 1px solid #eef1f6;
+    cursor: pointer;
+}
+
+.compra-opcao-pagamento:last-of-type {
+    border-bottom: none;
+}
+
+.compra-opcao-icone {
+    font-size: 20px;
+    width: 28px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.compra-opcao-label {
+    flex: 1;
+    font-size: 14px;
+    color: #334155;
+    font-weight: 500;
+}
+
+.compra-opcao-pagamento input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--bm-terracota);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.compra-erro-pagamento {
+    display: block;
+    color: #e53e3e;
+    font-size: 12px;
+    margin-top: 6px;
+    min-height: 14px;
+}
+
+/* ----- Resumo da compra (sidebar) ----- */
+.compra-resumo-card {
+    position: sticky;
+    top: 20px;
+}
+
+.compra-resumo-linha {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    color: #334155;
+    padding: 8px 0;
+}
+
+.compra-resumo-total {
+    border-top: 1px solid #eef1f6;
+    margin-top: 8px;
+    padding-top: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--bm-marrom-escuro);
+}
+
+.compra-resumo-total span:last-child {
+    color: var(--bm-terracota);
+}
+
+.btn-finalizar-pedido {
+    width: 100%;
+    background-color: var(--bm-terracota);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 18px;
+    transition: background 0.2s;
+}
+
+.btn-finalizar-pedido:hover {
+    background-color: var(--bm-terracota-escuro);
+}
+
+/* =====================================================
+   Responsivo — Dispositivos portáteis (≤ 900px)
+   Empilha o resumo da compra abaixo do conteúdo principal
+   ===================================================== */
+@media (max-width: 900px) {
+
+    .compra-container {
+        padding: 20px 12px 40px 12px;
+    }
+
+    .compra-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .compra-resumo-card {
+        position: static;
+    }
+
+    .compra-produto {
+        flex-wrap: wrap;
+    }
+}

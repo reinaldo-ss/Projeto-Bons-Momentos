@@ -1,0 +1,137 @@
+/* ===== Página Detalhes da Receita ===== */
+
+.detalhe-container {
+    padding: 30px 20px 50px 20px;
+}
+
+.detalhe-voltar {
+    display: inline-block;
+    color: var(--bm-marrom-escuro);
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 20px;
+    text-decoration: none;
+}
+
+.detalhe-voltar:hover {
+    text-decoration: underline;
+}
+
+.detalhe-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 30px;
+    align-items: start;
+}
+
+/* ----- Galeria: foto grande única ----- */
+.detalhe-foto-grande {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    display: block;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+/* ----- Painel de informações ----- */
+.detalhe-info {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.detalhe-nome {
+    font-size: 26px;
+    color: var(--bm-marrom-escuro);
+    margin: 0 0 12px 0;
+}
+
+.detalhe-preco {
+    font-size: 28px;
+    font-weight: bold;
+    color: var(--bm-terracota);
+    margin-bottom: 20px;
+}
+
+.detalhe-descricao {
+    margin-bottom: 25px;
+}
+
+.detalhe-subtitulo {
+    font-size: 12px;
+    font-weight: 600;
+    color: #94a3b8;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.detalhe-texto {
+    font-size: 14px;
+    color: #334155;
+    line-height: 1.6;
+}
+
+/* Botão WhatsApp */
+/* Botão Comprar — ação principal, bem destacada */
+.btn-comprar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    background: var(--bm-terracota);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    margin-bottom: 12px;
+    transition: background 0.2s;
+}
+
+.btn-comprar:hover {
+    background: var(--bm-terracota-escuro);
+}
+
+.btn-whatsapp {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    background: #25d366;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.btn-whatsapp:hover {
+    background: #1da851;
+}
+
+.whatsapp-icone{
+    display: flex;
+    align-items: center;
+}
+
+
+/* Responsivo: empilha em tela pequena */
+@media (max-width: 900px) {
+    .detalhe-grid {
+        grid-template-columns: 1fr;
+    }
+}

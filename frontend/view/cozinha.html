@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bons Momentos - Painel da Cozinha</title>
+
+    <!--Importações-->
+    <script src="../javascript/script.js" defer></script>
+    <link rel="stylesheet" href="../css/styleGlobal.css">
+    <link rel="stylesheet" href="../css/styleAdmin.css">
+    <link rel="stylesheet" href="../css/styleCozinha.css">
+
+</head>
+<body>
+    <!-- Cabeçalho da cozinha -->
+    <section id="secao-header-cozinha" class="cor_fundo">
+        <header class="cz-cabecalho content-section">
+            <div class="cz-orientacao-logo">
+                <img src="./img/logo-vm-branco.png" onerror="this.onerror=null; this.src='../img/logo-vm-branco.png';" class="logo" alt="Logo Bons Momentos">
+                <div>
+                    <h3>Bons Momentos</h3>
+                    <p>Painel da Cozinha</p>
+                </div>
+            </div>
+
+            <div class="cz-usuario">
+                <div class="cz-identidade">
+                    <span class="cz-avatar">C</span>
+                    <div class="cz-info">
+                        <p class="cz-nome">Cozinha</p>
+                        <p class="cz-cargo">Preparo de pedidos</p>
+                    </div>
+                </div>
+                <button class="cz-btn-sair" onclick="fazerLogout()">Sair</button>
+            </div>
+        </header>
+    </section>
+
+    <!-- Área principal: conteúdo dinâmico + menu lateral -->
+    <section>
+        <div class="content-section cz-conteudo-cozinha">
+
+            <div class="cz-topo-secao">
+                <h1 class="cz-titulo-pagina" id="cz-titulo-secao">Pedidos</h1>
+                <p class="cz-subtitulo-pagina" id="cz-subtitulo-secao">Gerencie os pedidos em andamento na cozinha</p>
+            </div>
+
+            <div class="cz-layout">
+                <!-- Conteúdo carregado dinamicamente via fetch (Pedidos / Histórico) -->
+                <div id="cz-area-principal" class="cz-area-principal"></div>
+
+                <nav class="cz-menu-lateral">
+                    <a class="cz-menu-item ativo" data-secao="pedidos" onclick="cz_selecionarSecao('pedidos', this)">Pedidos</a>
+                    <a class="cz-menu-item" data-secao="historico" onclick="cz_selecionarSecao('historico', this)">Histórico de Pedidos</a>
+                </nav>
+            </div>
+        </div>
+    </section>
+
+    <!-- Carrega a seção "Pedidos" ao abrir esta página diretamente (fora do fluxo da SPA) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof cz_selecionarSecao === 'function') cz_selecionarSecao('pedidos');
+        });
+    </script>
+</body>
+</html>
