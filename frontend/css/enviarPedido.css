@@ -1,0 +1,296 @@
+/* ===== Designação de Entrega (Enviar Pedido) ===== */
+
+/* ----- Cabeçalho (mesmo padrão visual da página Cozinha) ----- */
+.ep-cabecalho {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 20px;
+    color: var(--bm-marrom-escuro);
+}
+
+.ep-orientacao-logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.ep-orientacao-logo h3 {
+    color: var(--bm-marrom-escuro);
+    font-size: 18px;
+    margin: 0;
+}
+
+.ep-orientacao-logo p {
+    color: var(--bm-marrom-medio);
+    font-size: 12px;
+    margin: 0;
+    letter-spacing: 0.5px;
+}
+
+.ep-usuario {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.ep-identidade {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 14px 6px 6px;
+    background-color: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 30px;
+}
+
+.ep-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background-color: var(--bm-terracota);
+    color: var(--bm-branco);
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.ep-info {
+    line-height: 1.2;
+}
+
+.ep-nome {
+    color: var(--bm-marrom-escuro);
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.ep-cargo {
+    color: var(--bm-marrom-medio);
+    font-size: 11px;
+    margin: 0;
+}
+
+.ep-btn-sair {
+    background-color: #c0392b;
+    color: white;
+    border: none;
+    padding: 9px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+}
+
+.ep-btn-sair:hover {
+    background-color: #922b1f;
+}
+
+/* ----- Área principal ----- */
+.ep-secao-conteudo {
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px 60px 20px;
+}
+
+.ep-card {
+    width: 100%;
+    max-width: 720px;
+    background-color: white;
+    border: 1px solid #e4e8f0;
+    border-radius: 20px;
+    padding: 30px 36px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+}
+
+.ep-titulo-card {
+    color: var(--bm-marrom-escuro);
+    font-size: 22px;
+    font-weight: bold;
+    margin: 0 0 16px 0;
+    text-align: center;
+}
+
+.ep-divisoria {
+    border: none;
+    border-top: 1px solid #e4e8f0;
+    margin: 0 0 24px 0;
+}
+
+/* ----- Informações do pedido ----- */
+.ep-info-pedido {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px 30px;
+    margin-bottom: 28px;
+}
+
+.ep-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.ep-info-endereco {
+    grid-column: 1 / -1;
+}
+
+.ep-info-rotulo {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--bm-marrom-medio);
+}
+
+.ep-info-valor {
+    font-size: 15px;
+    font-weight: 500;
+    color: #2c3447;
+}
+
+/* ----- Seção de motoboys ----- */
+.ep-secao-motoboy {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 20px 0;
+    border-top: 1px solid #e4e8f0;
+    margin-bottom: 26px;
+}
+
+.ep-motoboy-rotulo {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--bm-marrom-escuro);
+    white-space: nowrap;
+}
+
+.ep-select-wrapper {
+    flex: 1;
+    min-width: 220px;
+}
+
+.ep-select-motoboy {
+    width: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #f9f4ee;
+    border: 1px solid #e8dcd0;
+    border-radius: 12px;
+    padding: 12px 44px 12px 16px;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--bm-marrom-escuro);
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s, background-color 0.2s;
+
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238A6952' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 16px;
+}
+
+.ep-select-motoboy:hover {
+    border-color: var(--bm-terracota);
+}
+
+.ep-select-motoboy:focus {
+    border-color: var(--bm-terracota);
+    background-color: white;
+}
+
+/* ----- Botões de ação ----- */
+.ep-acoes {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+.ep-btn-voltar,
+.ep-btn-enviar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 140px;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    background-color: white;
+    transition: all 0.2s ease;
+}
+
+.ep-btn-voltar {
+    border: 2px solid #d4ac0a;
+    color: #b7911a;
+}
+
+.ep-btn-voltar:hover {
+    background-color: #d4ac0a;
+    color: white;
+}
+
+.ep-btn-enviar {
+    border: 2px solid #27ae60;
+    color: #27ae60;
+}
+
+.ep-btn-enviar:hover {
+    background-color: #27ae60;
+    color: white;
+}
+
+/* =====================================================
+   Responsivo — Dispositivos portáteis (≤ 900px)
+   ===================================================== */
+@media (max-width: 900px) {
+
+    .ep-cabecalho {
+        flex-direction: column;
+        gap: 14px;
+        align-items: flex-start;
+    }
+
+    .ep-secao-conteudo {
+        padding: 20px 12px 40px 12px;
+    }
+
+    .ep-card {
+        padding: 24px 18px;
+        border-radius: 16px;
+    }
+
+    .ep-info-pedido {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .ep-secao-motoboy {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .ep-select-wrapper {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .ep-acoes {
+        flex-direction: column-reverse;
+    }
+
+    .ep-btn-voltar,
+    .ep-btn-enviar {
+        width: 100%;
+    }
+}
