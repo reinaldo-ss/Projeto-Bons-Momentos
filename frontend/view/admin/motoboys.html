@@ -6,9 +6,9 @@
     <title>Bons Momentos - Motoboys</title>
 
     <!--Importações-->
-    <script src="../javascript/script.js" defer></script>
-    <link rel="stylesheet" href="../css/styleGlobal.css">
-    <link rel="stylesheet" href="../css/styleAdmin.css">
+    <script src="../../javascript/script.js" defer></script>
+    <link rel="stylesheet" href="../../css/styleGlobal.css">
+    <link rel="stylesheet" href="../../css/styleAdmin.css">
 
 </head>
 <body>
@@ -16,7 +16,7 @@
     <section id="secao-header-admin" class="cor_fundo">
         <header class="cabecalho-admin content-section">
             <div class="orientacao-logo-admin">
-                <img src="./img/logo-vm-branco.png" onerror="this.onerror=null; this.src='../img/logo-vm-branco.png';" class="logo" alt="Logo Bons Momentos">
+                <img src="./img/logo-vm-branco.png" onerror="this.onerror=null; this.src='../../img/logo-vm-branco.png';" class="logo" alt="Logo Bons Momentos">
                 <div>
                     <h3>Bons Momentos</h3>
                     <p>Painel Administrativo</p>
@@ -44,10 +44,6 @@
                 <a class="admin-nav-link ativo" onclick="carregarPagina('motoboys')">Motoboys</a>
                 <a class="admin-nav-link" onclick="carregarPagina('historicoPedidos')">Histórico de Pedidos</a>
             </nav>
-            <div class="admin-nav-acoes">
-                <a class="btn-admin-cadastrar" onclick="carregarPagina('cadastrarReceita')">+ Cadastrar Receita</a>
-                <a class="btn-admin-cadastrar" onclick="carregarPagina('cadastrarMotoBoys')">+ Cadastrar Motoboys</a>
-            </div>
         </div>
     </section>
 
@@ -63,7 +59,7 @@
 
             <!-- Barra de ações -->
             <div class="admin-acoes">
-                <button class="btn-novo-receita" onclick="novoMotoboy()">+ Novo motoboy</button>
+                <button class="btn-novo-receita" onclick="carregarPagina('cadastrarMotoBoys')">+ Novo motoboy</button>
             </div>
 
             <!-- Tabela de motoboys -->
@@ -87,18 +83,46 @@
                         </tr>
                     </thead>
                     <tbody id="corpo-tabela-motoboys">
-
+                        <tr>
+                            <td>Carlos Silva</td>
+                            <td>carlos.silva@bonsmomentos.com</td>
+                            <td>••••••••</td>
+                            <td>1995-04-12</td>
+                            <td>01001-000</td>
+                            <td>Rua Santos Domingos</td>
+                            <td>São Paulo</td>
+                            <td>Centro</td>
+                            <td>219</td>
+                            <td>-</td>
+                            <td>(11) 98888-1234</td>
+                            <td>Motoboy</td>
+                            <td class="col-acoes">
+                                <button class="btn-alterar">Alterar</button>
+                                <button class="btn-deletar">Deletar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Fernanda Souza</td>
+                            <td>fernanda.souza@bonsmomentos.com</td>
+                            <td>••••••••</td>
+                            <td>1998-09-30</td>
+                            <td>02020-100</td>
+                            <td>Av. Paulista</td>
+                            <td>São Paulo</td>
+                            <td>Bela Vista</td>
+                            <td>1500</td>
+                            <td>Apto 22</td>
+                            <td>(11) 97777-4321</td>
+                            <td>Motoboy</td>
+                            <td class="col-acoes">
+                                <button class="btn-alterar">Alterar</button>
+                                <button class="btn-deletar">Deletar</button>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </section>
-
-    <!-- Carrega a tabela ao abrir esta página diretamente (fora do fluxo da SPA) -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            if (typeof carregarTabelaMotoboys === 'function') carregarTabelaMotoboys();
-        });
-    </script>
 </body>
 </html>

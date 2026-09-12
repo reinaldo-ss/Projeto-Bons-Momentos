@@ -6,9 +6,9 @@
     <title>Bons Momentos - Painel Administrador</title>
 
     <!--Importações-->
-    <script src="../javascript/script.js" defer></script>
-    <link rel="stylesheet" href="../css/styleGlobal.css">
-    <link rel="stylesheet" href="../css/styleAdmin.css">
+    <script src="../../javascript/script.js" defer></script>
+    <link rel="stylesheet" href="../../css/styleGlobal.css">
+    <link rel="stylesheet" href="../../css/styleAdmin.css">
     
 </head>
 <body>
@@ -16,7 +16,7 @@
     <section id="secao-header-admin" class="cor_fundo">
         <header class="cabecalho-admin content-section">
             <div class="orientacao-logo-admin">
-                <img src="./img/logo-vm-branco.png" onerror="this.onerror=null; this.src='../img/logo-vm-branco.png';" class="logo" alt="Logo Bons Momentos">
+                <img src="./img/logo-vm-branco.png" onerror="this.onerror=null; this.src='../../img/logo-vm-branco.png';" class="logo" alt="Logo Bons Momentos">
                 <div>
                     <h3>Bons Momentos</h3>
                     <p>Painel Administrativo</p>
@@ -44,10 +44,6 @@
                 <a class="admin-nav-link" onclick="carregarPagina('motoboys')">Motoboys</a>
                 <a class="admin-nav-link" onclick="carregarPagina('historicoPedidos')">Histórico de Pedidos</a>
             </nav>
-            <div class="admin-nav-acoes">
-                <a class="btn-admin-cadastrar" onclick="carregarPagina('cadastrarReceita')">+ Cadastrar Receita</a>
-                <a class="btn-admin-cadastrar" onclick="carregarPagina('cadastrarMotoBoys')">+ Cadastrar Motoboys</a>
-            </div>
         </div>
     </section>
 
@@ -63,14 +59,14 @@
 
             <!-- Barra de ações -->
             <div class="admin-acoes">
-                <button class="btn-novo-receita" onclick="novaReceita()">+ Nova receita</button>
+                <button class="btn-novo-receita" onclick="carregarPagina('cadastrarReceita')">+ Nova receita</button>
 
                 <div class="admin-buscar">
-                    <input type="text" id="input-buscar-receita" placeholder="Buscar receita..." onkeydown="checarEnter(event)">
+                    <input type="text" id="input-buscar-receita" placeholder="Buscar receita...">
                 </div>
 
-                <button class="btn-filtros" onclick="realizarPesquisa()">Pesquisar</button>
-                <button class="btn-relatorio" onclick="gerarRelatorio()">Gerar relatório</button>
+                <button class="btn-filtros">Pesquisar</button>
+                <button class="btn-relatorio">Gerar relatório</button>
             </div>
 
             <!-- Tabela de receitas -->
@@ -87,18 +83,32 @@
                         </tr>
                     </thead>
                     <tbody id="corpo-tabela-admin">
-
+                        <tr>
+                            <td><img src="https://placehold.co/80x50?text=Receita" class="tabela-img"></td>
+                            <td>Bolo de Chocolate</td>
+                            <td class="tabela-texto-truncado" title="Bolo fofinho de chocolate com cobertura cremosa de brigadeiro">Bolo fofinho de chocolate com cobertura cremosa de brigadeiro</td>
+                            <td class="tabela-texto-truncado" title="Farinha, chocolate 70%, ovos, leite, açúcar">Farinha, chocolate 70%, ovos, leite, açúcar</td>
+                            <td>R$ 45,90</td>
+                            <td class="col-acoes">
+                                <button class="btn-alterar">Alterar</button>
+                                <button class="btn-deletar">Deletar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><img src="https://placehold.co/80x50?text=Receita" class="tabela-img"></td>
+                            <td>Torta de Morango</td>
+                            <td class="tabela-texto-truncado" title="Torta gelada com morangos frescos, chantilly e biscoito">Torta gelada com morangos frescos, chantilly e biscoito</td>
+                            <td class="tabela-texto-truncado" title="Morango, chantilly, biscoito, leite condensado">Morango, chantilly, biscoito, leite condensado</td>
+                            <td>R$ 52,50</td>
+                            <td class="col-acoes">
+                                <button class="btn-alterar">Alterar</button>
+                                <button class="btn-deletar">Deletar</button>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </section>
-
-    <!-- Carrega a tabela ao abrir esta página diretamente (fora do fluxo da SPA) -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            if (typeof carregarTabelaAdmin === 'function') carregarTabelaAdmin();
-        });
-    </script>
 </body>
 </html>

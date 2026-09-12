@@ -6,9 +6,9 @@
     <title>Bons Momentos - Histórico de Pedidos</title>
 
     <!--Importações-->
-    <script src="../javascript/script.js" defer></script>
-    <link rel="stylesheet" href="../css/styleGlobal.css">
-    <link rel="stylesheet" href="../css/styleAdmin.css">
+    <script src="../../javascript/script.js" defer></script>
+    <link rel="stylesheet" href="../../css/styleGlobal.css">
+    <link rel="stylesheet" href="../../css/styleAdmin.css">
 
 </head>
 <body>
@@ -16,7 +16,7 @@
     <section id="secao-header-admin" class="cor_fundo">
         <header class="cabecalho-admin content-section">
             <div class="orientacao-logo-admin">
-                <img src="./img/logo-vm-branco.png" onerror="this.onerror=null; this.src='../img/logo-vm-branco.png';" class="logo" alt="Logo Bons Momentos">
+                <img src="./img/logo-vm-branco.png" onerror="this.onerror=null; this.src='../../img/logo-vm-branco.png';" class="logo" alt="Logo Bons Momentos">
                 <div>
                     <h3>Bons Momentos</h3>
                     <p>Painel Administrativo</p>
@@ -44,10 +44,6 @@
                 <a class="admin-nav-link" onclick="carregarPagina('motoboys')">Motoboys</a>
                 <a class="admin-nav-link ativo" onclick="carregarPagina('historicoPedidos')">Histórico de Pedidos</a>
             </nav>
-            <div class="admin-nav-acoes">
-                <a class="btn-admin-cadastrar" onclick="carregarPagina('cadastrarReceita')">+ Cadastrar Receita</a>
-                <a class="btn-admin-cadastrar" onclick="carregarPagina('cadastrarMotoBoys')">+ Cadastrar Motoboys</a>
-            </div>
         </div>
     </section>
 
@@ -66,8 +62,8 @@
                 <table class="admin-tabela">
                     <thead>
                         <tr>
-                            <th>ID Usuário</th>
-                            <th>ID Receita</th>
+                            <th>Cliente</th>
+                            <th>Receita</th>
                             <th>Observação</th>
                             <th>Opção de Pagamento</th>
                             <th>Status</th>
@@ -75,18 +71,26 @@
                         </tr>
                     </thead>
                     <tbody id="corpo-tabela-pedidos">
-
+                        <tr>
+                            <td class="tabela-texto-truncado">Ronaldo</td>
+                            <td class="tabela-texto-truncado">Bolo de Chocolate</td>
+                            <td class="tabela-texto-truncado">Sem cobertura extra</td>
+                            <td>PIX</td>
+                            <td><span class="status-pill status-pendente">Pendente</span></td>
+                            <td>2026-09-08</td>
+                        </tr>
+                        <tr>
+                            <td class="tabela-texto-truncado">Ronaldo</td>
+                            <td class="tabela-texto-truncado">Bolo de Chocolate</td>
+                            <td class="tabela-texto-truncado" title="Aniversário, escrever &quot;Parabéns&quot;">Aniversário, escrever "Parabéns"</td>
+                            <td>Cartão</td>
+                            <td><span class="status-pill status-entregue">Entregue</span></td>
+                            <td>2026-09-05</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </section>
-
-    <!-- Carrega a tabela ao abrir esta página diretamente (fora do fluxo da SPA) -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            if (typeof carregarTabelaPedidos === 'function') carregarTabelaPedidos();
-        });
-    </script>
 </body>
 </html>

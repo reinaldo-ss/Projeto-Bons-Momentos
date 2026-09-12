@@ -6,7 +6,7 @@
     <title>Bons Momentos - Login</title>
 
     <!--Importações-->
-    <script src="./javascript/script.js" defer></script>
+    <script src="../javascript/script.js" defer></script>
     <link rel="stylesheet" href="../css/styleLogin.css">
     <link rel="stylesheet" href="../css/styleGlobal.css">
 
@@ -24,7 +24,7 @@
                 </div>
                 <div class="login-dados">
                     <p id="titulo-login">Faça seu Login</p>
-                    <form id="formLogin" onsubmit="fazerLogin(event)">
+                    <form id="formLogin" onsubmit="event.preventDefault();">
                         
                         <div class="inputs-gerais-login">
                             <label for="email">E-mail</label>

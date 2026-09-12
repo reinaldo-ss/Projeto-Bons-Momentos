@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bons Momentos - Enviar Pedido</title>
+
+    <!--Importações-->
+    <script src="../../javascript/script.js" defer></script>
+    <link rel="stylesheet" href="../../css/styleGlobal.css">
+    <link rel="stylesheet" href="../../css/enviarPedido.css">
+
+</head>
+<body>
+    <!-- Cabeçalho (mesmo padrão da página Cozinha, sem navegação lateral) -->
+    <section id="secao-header-enviar-pedido" class="cor_fundo">
+        <header class="ep-cabecalho content-section">
+            <div class="ep-orientacao-logo">
+                <img src="./img/logo-vm-branco.png" onerror="this.onerror=null; this.src='../../img/logo-vm-branco.png';" class="logo" alt="Logo Bons Momentos">
+                <div>
+                    <h3>Bons Momentos</h3>
+                    <p>Painel da Cozinha</p>
+                </div>
+            </div>
+
+            <div class="ep-usuario">
+                <div class="ep-identidade">
+                    <span class="ep-avatar">C</span>
+                    <div class="ep-info">
+                        <p class="ep-nome">Cozinha</p>
+                        <p class="ep-cargo">Preparo de pedidos</p>
+                    </div>
+                </div>
+                <button class="ep-btn-sair" onclick="fazerLogout()">Sair</button>
+            </div>
+        </header>
+    </section>
+
+    <!-- Card de designação de entrega -->
+    <section>
+        <div class="content-section ep-secao-conteudo">
+            <div class="ep-card">
+
+                <h1 class="ep-titulo-card">Escolhendo Motoboy para entrega</h1>
+                <hr class="ep-divisoria">
+
+                <div class="ep-info-pedido">
+                    <div class="ep-info-item">
+                        <span class="ep-info-rotulo">Número do pedido</span>
+                        <span class="ep-info-valor">#1024</span>
+                    </div>
+
+                    <div class="ep-info-item">
+                        <span class="ep-info-rotulo">Opção de pagamento</span>
+                        <span class="ep-info-valor">PIX</span>
+                    </div>
+
+                    <div class="ep-info-item">
+                        <span class="ep-info-rotulo">Nome do cliente</span>
+                        <span class="ep-info-valor">Maria Oliveira</span>
+                    </div>
+                    
+                    <div class="ep-info-item">
+                        <span class="ep-info-rotulo">Telefone</span>
+                        <span class="ep-info-valor">(11) 98888-1234</span>
+                    </div>
+                    
+                    <div class="ep-info-item">
+                        <span class="ep-info-rotulo">CEP</span>
+                        <span class="ep-info-valor">01001-000</span>
+                    </div>
+
+                    <div class="ep-info-item ep-info-endereco">
+                        <span class="ep-info-rotulo">Endereço e Número</span>
+                        <span class="ep-info-valor">Rua Santos Domingos, 219</span>
+                    </div>
+
+                </div>
+
+                <div class="ep-secao-motoboy">
+                    <label class="ep-motoboy-rotulo" for="ep-select-motoboy">Motoboys disponíveis:</label>
+
+                    <div class="ep-select-wrapper">
+                        <select id="ep-select-motoboy" class="ep-select-motoboy">
+                            <option value="">Selecione um motoboy</option>
+                            <option value="1">Carlos Silva - (11) 98888-1234</option>
+                            <option value="2">Fernanda Souza - (11) 97777-4321</option>
+                            <option value="3">João Pereira - (11) 96666-8765</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="ep-acoes">
+                    <a href="cozinha.html" class="ep-btn-voltar">Voltar</a>
+                    <button type="button" class="ep-btn-enviar">Enviar</button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</body>
+</html>
