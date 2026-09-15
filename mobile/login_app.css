@@ -1,0 +1,141 @@
+/* ===== Protótipo mobile — Login do Entregador =====
+   Arquivo isolado, sem relação com as rotas/CSS do projeto principal.
+   Paleta de cores replicada do BonsMomentos. */
+
+:root {
+    --bm-creme: #F7E8CC;
+    --bm-creme-claro: #FBF3E4;
+    --bm-marrom-escuro: #5B3A21;
+    --bm-marrom-medio: #8A6952;
+    --bm-terracota: #C97B63;
+    --bm-terracota-escuro: #A85F49;
+    --bm-rosa-suave: #F1D9CE;
+    --bm-branco: #FFFFFF;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bm-branco);
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* ----- Moldura que simula uma tela de celular ----- */
+.app-frame {
+    width: 100%;
+    max-width: 400px;
+    height: 850px;
+    background-color: var(--bm-branco);
+    border-radius: 36px;
+    border: 1px solid #eee;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ----- Conteúdo da tela de login ----- */
+.login-conteudo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 32px;
+}
+
+.login-logo {
+    width: 110px;
+    height: 130px;
+    border-radius: 50%;
+    background-color: var(--bm-rosa-suave);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 22px;
+    flex-shrink: 0;
+}
+
+.login-logo svg {
+    width: 52px;
+    height: 52px;
+    fill: none;
+    stroke: var(--bm-terracota);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.login-boas-vindas {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--bm-marrom-escuro);
+    margin: 0 0 40px 0;
+    text-align: center;
+}
+
+.login-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.login-input {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid #e8dcd0;
+    background-color: #f9f4ee;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--bm-marrom-escuro);
+    outline: none;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.login-input::placeholder {
+    color: #b7a493;
+}
+
+.login-input:focus {
+    border-color: var(--bm-terracota);
+    background-color: var(--bm-branco);
+}
+
+.login-btn-entrar {
+    margin-top: 10px;
+    padding: 14px;
+    border: none;
+    border-radius: 14px;
+    background-color: var(--bm-terracota);
+    color: var(--bm-branco);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.login-btn-entrar:hover {
+    background-color: var(--bm-terracota-escuro);
+}
+
+/* =====================================================
+   Responsivo — telas bem estreitas
+   ===================================================== */
+@media (max-width: 420px) {
+    .app-frame {
+        max-width: 100%;
+        height: 100vh;
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
+    }
+}

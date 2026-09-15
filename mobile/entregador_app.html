@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bons Momentos - App do Entregador</title>
+
+    <link rel="stylesheet" href="entregador_app.css">
+</head>
+<body>
+    <div class="app-frame entregador-frame">
+
+        <!-- Cabeçalho -->
+        <header class="entregador-header">
+            <p class="entregador-header-boas-vindas">Bem-Vindo, Fulano</p>
+
+            <button class="entregador-btn-sair" type="button">Sair</button>
+        </header>
+
+        <!-- Corpo -->
+        <main class="entregador-corpo">
+            <p class="entregador-boas-vindas">Pedidos disponíveis</p>
+
+            <section class="entregador-pedidos-caixa">
+                <div class="pedido-card" id="pedidoCard">
+                    <button class="pedido-card-topo" id="pedidoToggle" type="button" aria-expanded="false">
+                        <span class="pedido-card-titulo">Pedido - 01</span>
+                        <svg class="pedido-card-seta" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+
+                    <div class="pedido-card-detalhes" id="pedidoDetalhes">
+                        <p class="pedido-detalhe-linha"><strong>Produto:</strong> Bolo de Chocolate</p>
+                        <p class="pedido-detalhe-linha"><strong>Pagamento:</strong> PIX</p>
+                        <p class="pedido-detalhe-linha"><strong>CEP:</strong> 00000-000</p>
+                        <p class="pedido-detalhe-linha"><strong>Endereço:</strong> Rua tal tal, N° 111</p>
+
+                        <button class="pedido-btn-concluir" type="button">Concluir</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+    </div>
+
+    <script src="entregador_app.js"></script>
+</body>
+</html>

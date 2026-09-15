@@ -1,0 +1,186 @@
+/* ===== Protótipo mobile — Dashboard do Entregador =====
+   Arquivo isolado, sem relação com as rotas/CSS do projeto principal.
+   Paleta de cores replicada do BonsMomentos. */
+
+:root {
+    --bm-creme: #F7E8CC;
+    --bm-creme-claro: #FBF3E4;
+    --bm-marrom-escuro: #5B3A21;
+    --bm-marrom-medio: #8A6952;
+    --bm-terracota: #C97B63;
+    --bm-terracota-escuro: #A85F49;
+    --bm-rosa-suave: #F1D9CE;
+    --bm-branco: #FFFFFF;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bm-branco);
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* ----- Moldura que simula uma tela de celular ----- */
+.app-frame {
+    width: 100%;
+    max-width: 400px;
+    height: 850px;
+    background-color: var(--bm-creme-claro);
+    border-radius: 36px;
+    border: 1px solid #eee;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ----- Cabeçalho ----- */
+.entregador-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 20px;
+    background-color: var(--bm-creme);
+    flex-shrink: 0;
+}
+
+.entregador-header-boas-vindas {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--bm-marrom-escuro);
+}
+
+.entregador-btn-sair {
+    border: none;
+    border-radius: 10px;
+    padding: 9px 18px;
+    background-color: #c0392b;
+    color: var(--bm-branco);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.entregador-btn-sair:hover {
+    background-color: #922b1f;
+}
+
+/* ----- Corpo ----- */
+.entregador-corpo {
+    flex: 1;
+    padding: 22px 20px;
+    overflow-y: auto;
+}
+
+.entregador-boas-vindas {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--bm-marrom-escuro);
+    margin: 0 0 18px 0;
+}
+
+.entregador-pedidos-caixa {
+    background-color: var(--bm-branco);
+    border-radius: 18px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+}
+
+/* ----- Card do pedido (acordeão) ----- */
+.pedido-card-topo {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 18px;
+    font-family: inherit;
+    text-align: left;
+}
+
+.pedido-card-titulo {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--bm-marrom-escuro);
+}
+
+.pedido-card-seta {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    fill: none;
+    stroke: var(--bm-terracota);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.25s ease;
+}
+
+#pedidoCard.aberto .pedido-card-seta {
+    transform: rotate(180deg);
+}
+
+.pedido-card-detalhes {
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 18px;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+#pedidoCard.aberto .pedido-card-detalhes {
+    max-height: 400px;
+    padding: 0 18px 18px 18px;
+}
+
+.pedido-detalhe-linha {
+    margin: 0 0 8px 0;
+    font-size: 13.5px;
+    color: #334155;
+    line-height: 1.4;
+}
+
+.pedido-detalhe-linha strong {
+    color: var(--bm-marrom-escuro);
+}
+
+.pedido-btn-concluir {
+    width: 100%;
+    margin-top: 8px;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background-color: #27ae60;
+    color: var(--bm-branco);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.pedido-btn-concluir:hover {
+    background-color: #1f8b4c;
+}
+
+/* =====================================================
+   Responsivo — telas bem estreitas
+   ===================================================== */
+@media (max-width: 420px) {
+    .app-frame {
+        max-width: 100%;
+        height: 100vh;
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
+    }
+}
