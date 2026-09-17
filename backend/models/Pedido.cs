@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,6 +17,9 @@ public class Pedido
 
     [Column("observacao")]
     public string? Observacao { get; set; }
+
+    [Column("endereco_entrega")]
+    public string EnderecoEntrega { get; set; } = string.Empty;
 
     [Column("opcao_pagamento")]
     public string OpcaoPagamento { get; set; } = string.Empty;

@@ -21,6 +21,23 @@ public class ReceitasController : ControllerBase
         return Ok(receitas);
     }
 
+    // Rota GET Específica: api/receitas/{id}
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Receita>> GetReceita(int id)
+    {
+        //Buscando a receita no banco de dados pela chave primária (ID)
+        var receita = await _context.Receitas.FindAsync(id);
+
+        //Se não encontrar no banco, retorna erro NotFound que equivale a um erro 404
+        if (receita == null)
+        {
+            return NotFound("Receita não encontrada.");
+        }
+
+        // 3. Se encontrar, retorna status 200 (OK) junto com os dados da receita
+        return Ok(receita);
+    }
+
     // Rota POST
     [HttpPost]
     public async Task<ActionResult<Receita>> PostReceita([FromBody] Receita receita)

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ConfeitariaApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bb54818349e45d58235488c0f73492f0c6af5fcb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7fa03da1e9d2ef4436cc3ddc584034c88d0e5275")]
 [assembly: System.Reflection.AssemblyProductAttribute("ConfeitariaApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ConfeitariaApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

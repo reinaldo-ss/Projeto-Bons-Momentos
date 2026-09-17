@@ -18,7 +18,7 @@ public class Usuario
     public string Senha { get; set; } = string.Empty;
 
     [Column("data_nascimento")]
-    public DateTime DataNascimento { get; set; }
+    public DateOnly DataNascimento { get; set; }
 
     [Column("cep")]
     public string? Cep { get; set; }
