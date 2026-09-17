@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\henri\\OneDrive\\Documentos\\PIM4\\backend\\ConfeitariaApi.csproj": {}
+    "c:\\Users\\henri\\OneDrive\\Documentos\\PIM4\\backend\\ConfeitariaApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\henri\\OneDrive\\Documentos\\PIM4\\backend\\ConfeitariaApi.csproj": {
+    "c:\\Users\\henri\\OneDrive\\Documentos\\PIM4\\backend\\ConfeitariaApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\henri\\OneDrive\\Documentos\\PIM4\\backend\\ConfeitariaApi.csproj",
+        "projectUniqueName": "c:\\Users\\henri\\OneDrive\\Documentos\\PIM4\\backend\\ConfeitariaApi.csproj",
         "projectName": "ConfeitariaApi",
-        "projectPath": "C:\\Users\\henri\\OneDrive\\Documentos\\PIM4\\backend\\ConfeitariaApi.csproj",
+        "projectPath": "c:\\Users\\henri\\OneDrive\\Documentos\\PIM4\\backend\\ConfeitariaApi.csproj",
         "packagesPath": "C:\\Users\\henri\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\henri\\OneDrive\\Documentos\\PIM4\\backend\\obj\\",
+        "outputPath": "c:\\Users\\henri\\OneDrive\\Documentos\\PIM4\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\henri\\AppData\\Roaming\\NuGet\\NuGet.Config"

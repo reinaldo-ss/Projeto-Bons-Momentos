@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bons Momentos - Cardápio</title>
+
+    <!--Importações-->
+    <script src="../javascript/script.js" defer></script>
+    <link rel="stylesheet" href="../css/styleCardapio.css">
+    <link rel="stylesheet" href="../css/styleGlobal.css">
+
+</head>
+<body>
+    <section class="section-carrossel">
+        <div class="content-section">
+            <div class="carrossel" id="carrossel">
+                <button class="carrossel-seta carrossel-seta-esq" onclick="moverCarrossel(-1)">‹</button>
+
+                <div class="carrossel-viewport">
+                    <div class="carrossel-trilho" id="carrossel-trilho">
+                        <div class="carrossel-slide">
+                            <img  src="./img/carro1.png" alt="Destaque 1">
+                        </div>
+                        <div class="carrossel-slide">
+                            <img src="./img/carro2.jpg" alt="Destaque 2">
+                        </div>
+                        <div class="carrossel-slide">
+                            <img src="./img/carro3.jpg" alt="Destaque 3">
+                        </div>
+                        <div class="carrossel-slide">
+                            <img src="./img/carro4.jpg" alt="Destaque 4">
+                        </div>
+                    </div>
+                </div>
+
+                <button class="carrossel-seta carrossel-seta-dir" onclick="moverCarrossel(1)">›</button>
+
+                <div class="carrossel-indicadores">
+                    <span class="indicador ativo" onclick="irParaSlide(0)"></span>
+                    <span class="indicador" onclick="irParaSlide(1)"></span>
+                    <span class="indicador" onclick="irParaSlide(2)"></span>
+                    <span class="indicador" onclick="irParaSlide(3)"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-pesquisa">
+        <div class="content-section pesquisa">
+            <div class="barra_de_pesquisa">
+                <input type="text" name="" id="input-buscar-receita" placeholder="Buscar por nome da receita...">
+            </div>
+            <button id="filtro_pesquisa">Pesquisar</button>
+        </div>
+    </section>
+
+
+    <section>
+        <div class="texto-mostruario content-section">
+            <p class="titulo-mostruario">Receitas Disponíveis</p>
+            <p class="subtitulo-mostruario">X receitas encontradas</p>
+
+        <!--Cards das receitas-->
+        <section class="catalogo">
+
+            <!-- Card 1 -->
+            <div class="card-receita" onclick="carregarPagina('detalhesReceita')">
+                <div class="card-img">
+                    <img src="https://placehold.co/400x250" alt="Foto da receita" />
+                </div>
+                <div class="card-info">
+                    <h3>Bolo Red Velvet</h3>
+                    <p class="card-ingredientes">Massa de cacau, corante alimentício, buttermilk, cream cheese, manteiga e açúcar de confeiteiro.</p>
+                    <p class="card-preco">R$ 85,00</p>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="card-receita" onclick="carregarPagina('detalhesReceita')">
+                <div class="card-img">
+                    <img src="https://placehold.co/400x250" alt="Foto da receita" />
+                </div>
+                <div class="card-info">
+                    <h3>Trufas Sortidas</h3>
+                    <p class="card-ingredientes">Chocolate belga meio amargo, creme de leite, manteiga e granulado a gosto. Caixa com 12 unidades.</p>
+                    <p class="card-preco">R$ 45,00</p>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="card-receita" onclick="carregarPagina('detalhesReceita')">
+                <div class="card-img">
+                    <img src="https://placehold.co/400x250" alt="Foto da receita" />
+                </div>
+                <div class="card-info">
+                    <h3>Torta de Limão</h3>
+                    <p class="card-ingredientes">Massa amanteigada, creme de leite condensado, suco e raspas de limão, merengue italiano.</p>
+                    <p class="card-preco">R$ 70,00</p>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="card-receita" onclick="carregarPagina('detalhesReceita')">
+                <div class="card-img">
+                    <img src="https://placehold.co/400x250" alt="Foto da receita" />
+                </div>
+                <div class="card-info">
+                    <h3>Brigadeiros Gourmet</h3>
+                    <p class="card-ingredientes">Leite condensado, chocolate em pó, manteiga e coberturas variadas. Caixa com 20 unidades.</p>
+                    <p class="card-preco">R$ 40,00</p>
+                </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="card-receita" onclick="carregarPagina('detalhesReceita')">
+                <div class="card-img">
+                    <img src="https://placehold.co/400x250" alt="Foto da receita" />
+                </div>
+                <div class="card-info">
+                    <h3>Bolo de Chocolate</h3>
+                    <p class="card-ingredientes">Massa de chocolate meio amargo, cobertura de ganache e raspas de chocolate belga.</p>
+                    <p class="card-preco">R$ 65,00</p>
+                </div>
+            </div>
+        </section>
+    </div>
+    </section>
+
+</body>
+</html>

@@ -1,0 +1,274 @@
+/* ===== Estilização da tela Cadastrar Motoboys ===== */
+/* Reaproveita .cadastro-dados, .msg-erro-cad e .input-erro-cad (já globais via styleCadReceita.css / styleCadCliente.css) */
+
+/* Section geral que limita o tamanho */
+.section-cadastro-cad-motoboy {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 40px 0;
+}
+
+/* Div que engloba os itens internos */
+.tela-geral-cad-motoboy {
+    border: solid 1px #ddd;
+    border-radius: 20px;
+    display: flex;
+    width: 1100px;
+}
+
+/* Div com imagem na lateral */
+.info-lateral-cad-motoboy {
+    width: 450px;
+    min-width: 450px;
+    align-self: stretch;
+    border-radius: 20px 0 0 20px;
+    background-color: var(--bm-terracota);
+
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#sair-cad-motoboy {
+    color: white;
+    font-size: 20px;
+    font-weight: 550;
+    position: absolute;
+    top: 15px;
+    left: 18px;
+}
+
+#texto-central-cad-motoboy {
+    gap: 10px;
+    display: flex;
+    color: white;
+}
+
+#titulo-logo-cad-motoboy {
+    font-weight: bold;
+}
+
+#titulo-cadastro-cad-motoboy {
+    display: flex;
+    justify-content: center;
+    font-size: 16px;
+}
+
+/* Div que separa cada input */
+.inputs-gerais-cad-motoboy {
+    margin: 10px 0;
+    flex: 1;
+    min-width: 0;
+}
+
+/* Alinhamento dos Inputs */
+.grupo-input-cad-motoboy {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Estilização icones dos input */
+svg {
+    width: 28px;
+    height: 28px;
+    fill: none;
+    stroke: #94a3b8;
+    stroke-width: 1.8;
+    flex-shrink: 0;
+}
+
+.grupo-input-cad-motoboy input::placeholder {
+    color: #c4cdd6;
+}
+
+.linha-dupla-inputs-cad-motoboy {
+    display: flex;
+    gap: 25px;
+}
+
+.linha-tripla-inputs-cad-motoboy {
+    display: flex;
+    gap: 20px;
+}
+
+.grupo-input-cad-motoboy input,
+.grupo-input-cad-motoboy select {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    background: #f4f6f8;
+    border: 1px solid #e8edf2;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 14px;
+    color: #0f172a;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    box-sizing: border-box;
+}
+
+label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+/* Linha */
+.linha-divisoria-cad-motoboy {
+    height: 1px;
+    background: #e2e8f0;
+    margin: 10px 0;
+}
+
+/* Versão compacta da área de dados */
+.cadastro-dados-motoboy-cad-motoboy {
+    width: 560px;
+    margin: 15px 40px;
+    font-size: 13px;
+}
+
+.cadastro-dados-motoboy-cad-motoboy label {
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+
+.cadastro-dados-motoboy-cad-motoboy .inputs-gerais-cad-motoboy {
+    margin: 6px 0;
+}
+
+.cadastro-dados-motoboy-cad-motoboy .grupo-input-cad-motoboy input,
+.cadastro-dados-motoboy-cad-motoboy .grupo-input-cad-motoboy select {
+    padding: 7px 10px;
+    font-size: 13px;
+    border-radius: 8px;
+}
+
+.cadastro-dados-motoboy-cad-motoboy svg {
+    width: 22px;
+    height: 22px;
+}
+
+.cadastro-dados-motoboy-cad-motoboy .linha-divisoria-cad-motoboy {
+    margin: 6px 0;
+}
+
+/* botao cadastrar */
+.botao-cadastrar-cad-motoboy {
+    width: 100%;
+    background-color: var(--bm-terracota);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin: 10px 0px;
+    transition: background 0.2s;
+}
+
+.botao-cadastrar-cad-motoboy:hover {
+    background-color: var(--bm-terracota-escuro);
+}
+
+/* Rodapé com Voltar + Cadastrar lado a lado */
+.acoes-motoboy-cad-motoboy {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.acoes-motoboy-cad-motoboy .botao-cadastrar-cad-motoboy {
+    flex: 3;
+    margin: 0;
+}
+
+.botao-voltar-cad-motoboy {
+    flex: 1;
+    background: #e2e8f0;
+    color: #475569;
+    border: none;
+    border-radius: 12px;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.botao-voltar-cad-motoboy:hover {
+    background: #cbd5e1;
+}
+
+/* ===== Validação dos campos ===== */
+.grupo-input-cad-motoboy input.input-erro-cad,
+.grupo-input-cad-motoboy select.input-erro-cad {
+    border-color: #e53e3e;
+    background: #fff5f5;
+}
+
+.msg-erro-cad {
+    display: block;
+    color: #e53e3e;
+    font-size: 11px;
+    margin-top: 4px;
+    margin-left: 38px;
+    min-height: 14px;
+    line-height: 1.3;
+}
+
+/* =====================================================
+   Responsivo — Dispositivos portáteis (≤ 900px)
+   Empilha a coluna lateral e colapsa linhas de 2 e 3 inputs
+   ===================================================== */
+@media (max-width: 900px) {
+
+    .section-cadastro-cad-motoboy {
+        padding: 20px 10px;
+        min-height: auto;
+    }
+
+    .tela-geral-cad-motoboy {
+        flex-direction: column;
+        width: 100%;
+        max-width: 560px;
+    }
+
+    .info-lateral-cad-motoboy {
+        width: 100%;
+        min-width: 0;
+        min-height: 180px;
+        border-radius: 20px 20px 0 0;
+    }
+
+    #texto-central-cad-motoboy {
+        margin-bottom: 0;
+        text-align: center;
+    }
+
+    /* Corrige overflow: usa padding em vez de margin para não extrapolar o container */
+    .cadastro-dados-motoboy-cad-motoboy {
+        width: 100%;
+        margin: 0;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    /* Pares e triplas de inputs viram empilhados */
+    .linha-dupla-inputs-cad-motoboy,
+    .linha-tripla-inputs-cad-motoboy {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .acoes-motoboy-cad-motoboy {
+        flex-wrap: nowrap;
+    }
+}

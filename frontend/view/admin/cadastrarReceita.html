@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bons Momentos - Cadastrar Receita</title>
+
+    <!--Importações-->
+    <script src="../../javascript/script.js"></script>
+    <link rel="stylesheet" href="../../css/styleCadReceita.css">
+    <link rel="stylesheet" href="../../css/styleGlobal.css">
+
+</head>
+<body>
+    <section>
+        <div class="content-section section-cadastro-cad-receita">
+            <div class="tela-geral-cad-receita">
+                <div class="info-lateral-cad-receita">
+                    <a id="sair-cad-receita" onclick="carregarPagina('admin')"> < </a>
+
+                    <div id="texto-central-cad-receita">
+                        <img class="logo2" src="./img/logo-vm-branco.png" onerror="this.onerror=null; this.src='../../img/logo-vm-branco.png';" alt="Logo do Bons Momentos">
+                            <div>
+                                <p id="titulo-logo-cad-receita">Bons Momentos</p>
+                                <p>Cadastre a sua receita</p>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="cadastro-dados cadastro-dados-receita-cad-receita">
+                    <p id="titulo-cadastro-cad-receita">Formulário Cadastrar Receita</p>
+
+                    <form id='formCadastrarReceita'>
+                        <div class="linha-divisoria-cad-receita"></div>
+
+                        <p class="secao-subtitulo-cad-receita">Informações da receita</p>
+
+                        <div class="inputs-gerais-cad-receita">
+                            <label for="nome">Nome da receita</label>
+                            <div class="grupo-input-cad-receita">
+                                <svg class="icone-input" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><circle cx="7" cy="7" r="1.5"/></svg>
+                                <input type="text" id="nome" name="nome" placeholder="Ex: Bolo Red Velvet" maxlength="100" />
+                            </div>
+                            <span class="msg-erro-cad-receita" id="erro-nome"></span>
+                        </div>
+
+                        <div class="inputs-gerais-cad-receita">
+                            <label for="descricao">Descrição</label>
+                            <div class="grupo-input-cad-receita">
+                                <svg class="icone-input" viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="14" y2="18"/></svg>
+                                <textarea id="descricao" name="descricao" rows="3" placeholder="Descreva a receita: sabor, tamanho, modo de preparo, informações extras..."></textarea>
+                            </div>
+                            <span class="msg-erro-cad-receita" id="erro-descricao"></span>
+                        </div>
+
+                        <div class="inputs-gerais-cad-receita">
+                            <label for="ingredientes">Ingredientes</label>
+                            <div class="grupo-input-cad-receita">
+                                <svg class="icone-input" viewBox="0 0 24 24"><line x1="9" y1="6" x2="20" y2="6"/><line x1="9" y1="12" x2="20" y2="12"/><line x1="9" y1="18" x2="20" y2="18"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>
+                                <textarea id="ingredientes" name="ingredientes" rows="3" placeholder="Liste os ingredientes separados por vírgula"></textarea>
+                            </div>
+                            <span class="msg-erro-cad-receita" id="erro-ingredientes"></span>
+                        </div>
+
+                        <div class="inputs-gerais-cad-receita">
+                            <label for="preco">Preço (R$)</label>
+                            <div class="grupo-input-cad-receita">
+                                <svg class="icone-input" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                                <input type="number" step="0.01" id="preco" name="preco" placeholder="0,00" />
+                            </div>
+                            <span class="msg-erro-cad-receita" id="erro-preco"></span>
+                        </div>
+
+                        <div class="linha-divisoria-cad-receita"></div>
+
+                        <p class="secao-subtitulo-cad-receita">Foto da receita</p>
+
+                        <div class="inputs-gerais-cad-receita">
+                            <label for="foto">Foto</label>
+                            <label class="upload-foto-cad-receita" for="foto">
+                                <img class="preview-foto-cad-receita" id="preview-foto" src="" alt="Preview">
+                                <div class="upload-placeholder-cad-receita">
+                                    <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><polyline points="21 17 16 12 5 19"/></svg>
+                                    <span>Clique para<br>adicionar foto</span>
+                                </div>
+                            </label>
+                            <input type="file" id="foto" name="Foto" accept=".jpg,.jpeg,.png" hidden />
+                            <span class="msg-erro-cad-receita" id="erro-foto"></span>
+                        </div>
+
+                        <div class="linha-divisoria-cad-receita"></div>
+
+                        <div class="acoes-receita-cad-receita">
+                            <button type="button" class="botao-voltar-cad-receita" onclick="carregarPagina('admin')">Voltar</button>
+                            <button type="submit" id="btn-submit-receita" class="botao-cadastrar-cad-receita">Cadastrar receita</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

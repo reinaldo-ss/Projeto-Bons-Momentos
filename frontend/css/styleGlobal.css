@@ -1,0 +1,78 @@
+/* ===== Paleta de cores — Bons Momentos ===== */
+:root {
+    --bm-creme: #F7E8CC;
+    --bm-creme-claro: #FBF3E4;
+    --bm-marrom-escuro: #5B3A21;
+    --bm-marrom-medio: #8A6952;
+    --bm-terracota: #C97B63;
+    --bm-terracota-escuro: #A85F49;
+    --bm-rosa-suave: #F1D9CE;
+    --bm-branco: #FFFFFF;
+}
+
+section {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+.content-section{
+    width: 100%;
+    max-width: 1440px;
+}
+
+.cor_fundo {
+    background-color: var(--bm-creme);
+    flex-shrink: 0;
+}
+
+.cor_fundo2 {
+    background-color: rgb(250, 250, 250);
+}
+
+/* 1. Garante que o corpo da página ocupe toda a altura da tela */
+html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+}
+
+/* Body ocupa toda a largura — os sections de header/footer ficam full-width.
+   O conteúdo interno é centralizado via .content-section (max-width: 1440px). */
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--bm-branco);
+}
+
+/* "Reset Universal" */
+*, *::before, *::after {
+    box-sizing: border-box; /* Includes padding/border in element width */
+    margin: 0;
+    padding: 0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.logo {
+    height: 40px;
+}
+
+.logo2 {
+    height: 60px;
+}
+
+a {
+    cursor: pointer;
+}
+
+/* ===== Proteção geral de responsividade ===== */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+section, .content-section {
+    max-width: 100%;
+}
+

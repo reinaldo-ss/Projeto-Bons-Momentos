@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bons Momentos - Finalizar Compra</title>
+
+    <!--Importações-->
+    <script src="../javascript/script.js" defer></script>
+    <link rel="stylesheet" href="../css/styleFinalCompra.css">
+    <link rel="stylesheet" href="../css/styleGlobal.css">
+
+</head>
+<body>
+    <section>
+        <div class="content-section compra-container">
+
+            <h1 class="compra-titulo">Finalize sua compra</h1>
+
+            <div class="compra-grid">
+
+                <!-- Coluna principal -->
+                <div class="compra-coluna-principal">
+
+                    <!-- Resumo do produto -->
+                    <div class="compra-card">
+                        <div class="compra-produto">
+                            <img class="compra-produto-foto" id="compra-foto" src="https://placehold.co/120x120?text=Bolo" alt="Foto da receita">
+                            <div class="compra-produto-info">
+                                <p class="compra-produto-nome" id="compra-nome">Bolo de Chocolate</p>
+                                <p class="compra-produto-preco" id="compra-preco">R$ 45,90</p>
+                            </div>
+                        </div>
+
+                        <div class="compra-observacao">
+                            <label for="observacao">Observação sobre o pedido (opcional)</label>
+                            <textarea id="observacao" name="observacao" form="formFinalCompra" rows="3" placeholder="Ex: sem cobertura, retirar às 18h..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Endereço de entrega -->
+                    <div class="compra-card">
+                        <p class="compra-card-titulo">Endereço de entrega</p>
+                        <div class="compra-endereco">
+                            <span class="compra-endereco-icone">📍</span>
+                            <p class="compra-endereco-texto" id="compra-endereco-texto">Rua Santos Domingos, 219 - Centro, São Paulo - CEP 01001-000</p>
+                        </div>
+                    </div>
+
+                    <!-- Forma de pagamento -->
+                    <div class="compra-card">
+                        <div class="compra-pagamento-topo">
+                            <p class="compra-card-titulo">Forma de pagamento</p>
+                            <span class="compra-pagamento-selo">Pago na retirada</span>
+                        </div>
+
+                        <form id="formFinalCompra">
+                            <label class="compra-opcao-pagamento">
+                                <span class="compra-opcao-icone">💵</span>
+                                <span class="compra-opcao-label">Dinheiro</span>
+                                <input type="radio" name="opcaoPagamento" value="Dinheiro">
+                            </label>
+                            <label class="compra-opcao-pagamento">
+                                <span class="compra-opcao-icone">💳</span>
+                                <span class="compra-opcao-label">Cartão</span>
+                                <input type="radio" name="opcaoPagamento" value="Cartão">
+                            </label>
+                            <label class="compra-opcao-pagamento">
+                                <span class="compra-opcao-icone">🎫</span>
+                                <span class="compra-opcao-label">VR ou VA</span>
+                                <input type="radio" name="opcaoPagamento" value="VR ou VA">
+                            </label>
+                            <label class="compra-opcao-pagamento">
+                                <span class="compra-opcao-icone">📱</span>
+                                <span class="compra-opcao-label">PIX</span>
+                                <input type="radio" name="opcaoPagamento" value="PIX">
+                            </label>
+                            <span class="compra-erro-pagamento" id="erro-opcaoPagamento"></span>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Coluna lateral: resumo da compra -->
+                <div class="compra-coluna-lateral">
+                    <div class="compra-card compra-resumo-card">
+                        <p class="compra-card-titulo">Resumo da compra</p>
+
+                        <div class="compra-resumo-linha">
+                            <span>Produto</span>
+                            <span id="compra-resumo-preco">R$ 45,90</span>
+                        </div>
+
+                        <div class="compra-resumo-linha compra-resumo-total">
+                            <span>Total</span>
+                            <span id="compra-total">R$ 45,90</span>
+                        </div>
+
+                        <button type="submit" form="formFinalCompra" class="btn-finalizar-pedido">Finalizar Pedido</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

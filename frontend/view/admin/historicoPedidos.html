@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bons Momentos - Histórico de Pedidos</title>
+
+    <!--Importações-->
+    <script src="../../javascript/script.js" defer></script>
+    <link rel="stylesheet" href="../../css/styleGlobal.css">
+    <link rel="stylesheet" href="../../css/styleAdmin.css">
+
+</head>
+<body>
+    <!-- Cabeçalho do administrador -->
+    <section id="secao-header-admin" class="cor_fundo">
+        <header class="cabecalho-admin content-section">
+            <div class="orientacao-logo-admin">
+                <img src="./img/logo-vm-branco.png" onerror="this.onerror=null; this.src='../../img/logo-vm-branco.png';" class="logo" alt="Logo Bons Momentos">
+                <div>
+                    <h3>Bons Momentos</h3>
+                    <p>Painel Administrativo</p>
+                </div>
+            </div>
+
+            <div class="admin-usuario">
+                <div class="admin-identidade">
+                    <span class="admin-avatar">A</span>
+                    <div class="admin-info">
+                        <p class="admin-nome">Administrador</p>
+                        <p class="admin-cargo">Acesso total</p>
+                    </div>
+                </div>
+                <button class="btn-sair" onclick="fazerLogout()">Sair</button>
+            </div>
+        </header>
+    </section>
+
+    <!-- Subnavegação do administrador -->
+    <section class="admin-subnav-section">
+        <div class="content-section admin-subnav">
+            <nav class="admin-nav">
+                <a class="admin-nav-link" onclick="carregarPagina('admin')">Cardápio</a>
+                <a class="admin-nav-link" onclick="carregarPagina('motoboys')">Motoboys</a>
+                <a class="admin-nav-link ativo" onclick="carregarPagina('historicoPedidos')">Histórico de Pedidos</a>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Conteúdo principal -->
+    <section>
+        <div class="content-section admin-conteudo">
+            <div class="admin-topo">
+                <div>
+                    <p class="admin-titulo">Histórico de Pedidos</p>
+                    <p class="admin-subtitulo">Acompanhe todos os pedidos já realizados na plataforma</p>
+                </div>
+            </div>
+
+            <!-- Tabela de pedidos -->
+            <div class="admin-tabela-wrapper">
+                <table class="admin-tabela">
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Receita</th>
+                            <th>Observação</th>
+                            <th>Opção de Pagamento</th>
+                            <th>Status</th>
+                            <th>Data do Pedido</th>
+                        </tr>
+                    </thead>
+                    <tbody id="corpo-tabela-pedidos">
+                        <tr>
+                            <td class="tabela-texto-truncado">Ronaldo</td>
+                            <td class="tabela-texto-truncado">Bolo de Chocolate</td>
+                            <td class="tabela-texto-truncado">Sem cobertura extra</td>
+                            <td>PIX</td>
+                            <td><span class="status-pill status-pendente">Pendente</span></td>
+                            <td>2026-09-08</td>
+                        </tr>
+                        <tr>
+                            <td class="tabela-texto-truncado">Ronaldo</td>
+                            <td class="tabela-texto-truncado">Bolo de Chocolate</td>
+                            <td class="tabela-texto-truncado" title="Aniversário, escrever &quot;Parabéns&quot;">Aniversário, escrever "Parabéns"</td>
+                            <td>Cartão</td>
+                            <td><span class="status-pill status-entregue">Entregue</span></td>
+                            <td>2026-09-05</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
