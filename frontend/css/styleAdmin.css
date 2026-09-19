@@ -130,30 +130,6 @@
     color: white;
 }
 
-.admin-nav-acoes {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.btn-admin-cadastrar {
-    padding: 9px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--bm-terracota);
-    border: 1px solid var(--bm-terracota);
-    white-space: nowrap;
-    transition: all 0.2s ease;
-}
-
-.btn-admin-cadastrar:hover {
-    background-color: var(--bm-terracota);
-    color: white;
-}
-
 /* ===== Conteúdo principal ===== */
 .admin-conteudo {
     padding: 30px 20px 60px 20px;
@@ -391,8 +367,7 @@
         align-items: stretch;
     }
 
-    .admin-nav,
-    .admin-nav-acoes {
+    .admin-nav {
         justify-content: center;
     }
 
