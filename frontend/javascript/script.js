@@ -457,8 +457,6 @@ function _mostrarErroCad(id, msg) {
     input.classList.toggle('input-erro-cad', !!msg);
 }
 
-// ===== Validação do Cadastro de Motoboy =====
-
 function _validDataNascimento(v) {
     v = v.trim();
     if (!v) return 'Data de nascimento é obrigatória';
@@ -492,18 +490,39 @@ function _validNumero(v) {
     return '';
 }
 
+// ===== Validação do Cadastro de Motoboy =====
+
+function _validCpf(v) {
+    v = v.trim();
+    if (!v) return 'CPF é obrigatório';
+    if (!/^\d+$/.test(v)) return 'Use apenas números';
+    if (v.length !== 11) return 'CPF deve ter 11 dígitos';
+    return '';
+}
+
+function _validCnh(v) {
+    v = v.trim();
+    if (!v) return 'CNH é obrigatória';
+    if (!/^\d+$/.test(v)) return 'Use apenas números';
+    if (v.length !== 9) return 'CNH deve ter 9 dígitos';
+    return '';
+}
+
+function _validPlaca(v) {
+    v = v.trim();
+    if (!v) return 'Placa é obrigatória';
+    if (v.length < 7) return 'Placa inválida';
+    return '';
+}
+
 function validarFormCadMotoboy() {
     const campos = [
         { id: 'nome',            fn: _validNome },
-        { id: 'email',           fn: _validEmail },
-        { id: 'senha',           fn: _validSenha },
-        { id: 'dataNascimento',  fn: _validDataNascimento },
-        { id: 'cep',             fn: _validCep },
-        { id: 'endereco',        fn: _validEndereco },
-        { id: 'cidade',          fn: _validCidade },
-        { id: 'bairro',          fn: _validBairro },
-        { id: 'numero',          fn: _validNumero },
+        { id: 'cpf',             fn: _validCpf },
         { id: 'telefone',        fn: _validTelefone },
+        { id: 'cnh',             fn: _validCnh },
+        { id: 'placa',           fn: _validPlaca },
+        { id: 'senha',           fn: _validSenha }
     ];
     let valido = true;
     campos.forEach(({ id, fn }) => {
@@ -520,27 +539,30 @@ document.addEventListener('focusout', function(e) {
     if (!document.getElementById('formCadastrarMotoboy')) return;
     const mapa = {
         nome:           _validNome,
-        email:          _validEmail,
-        senha:          _validSenha,
-        dataNascimento: _validDataNascimento,
-        cep:            _validCep,
-        endereco:       _validEndereco,
-        cidade:         _validCidade,
-        bairro:         _validBairro,
-        numero:         _validNumero,
+        cpf:            _validCpf,
         telefone:       _validTelefone,
+        cnh:            _validCnh,
+        placa:          _validPlaca,
+        senha:          _validSenha
     };
     const id = e.target?.id;
     if (mapa[id]) _mostrarErroCad(id, mapa[id](e.target.value));
 });
 
-// Filtra caracteres inválidos durante a digitação (CEP e telefone só números)
+// Filtra caracteres inválidos durante a digitação para o form do Motoboy
 document.addEventListener('input', function(e) {
     if (!document.getElementById('formCadastrarMotoboy')) return;
     const id = e.target?.id;
-    if (id === 'cep' || id === 'telefone') {
+    
+    // Garante que só números sejam digitados no CPF, CNH e Telefone
+    if (id === 'cpf' || id === 'cnh' || id === 'telefone') {
         const limpo = e.target.value.replace(/\D/g, '');
         if (limpo !== e.target.value) e.target.value = limpo;
+    }
+    
+    // Deixa a Placa sempre em maiúsculo automaticamente
+    if (id === 'placa') {
+        e.target.value = e.target.value.toUpperCase();
     }
 });
 
