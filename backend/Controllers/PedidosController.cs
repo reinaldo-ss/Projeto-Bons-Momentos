@@ -1,15 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ConfeitariaApi.Services;
 
 [ApiController]
 [Route("api/[controller]")]
 public class PedidosController : ControllerBase
 {
     private readonly AppDbContext _context;
+    private readonly IPedidoService _pedidoService;
 
-    public PedidosController(AppDbContext context)
+    public PedidosController(AppDbContext context, IPedidoService pedidoService)
     {
         _context = context;
+        _pedidoService = pedidoService;
     }
 
     // Rota GET: api/pedidos
@@ -38,17 +41,18 @@ public class PedidosController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Pedido>> PostPedido([FromBody] Pedido pedido)
     {
-        // Garante que a data do pedido seja gerada caso venha vazia
-        if (pedido.DataPedido == default)
+        try
         {
-            pedido.DataPedido = DateTime.UtcNow;
+            // O Service faz a validação e salva no banco
+            var pedidoCriado = await _pedidoService.CriarPedidoAsync(pedido);
+            
+            return CreatedAtAction("GetPedido", new { id = pedidoCriado.Id }, pedidoCriado);
         }
-        //
-
-        _context.Pedidos.Add(pedido);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetPedido), new { id = pedido.Id }, pedido);
+        catch (Exception ex)
+        {
+            // Se cair em alguma regra de negócio do Service, devolve o erro 400 com a mensagem
+            return BadRequest(new { mensagem = ex.Message });
+        }
     }
 
     // Rota PUT
