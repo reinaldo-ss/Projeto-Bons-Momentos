@@ -1,15 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ConfeitariaApi.Services;
 
 [ApiController]
 [Route("api/[controller]")]
 public class ReceitasController : ControllerBase
 {
     private readonly AppDbContext _context;
+    private readonly IReceitaService _receitaService;
 
-    public ReceitasController(AppDbContext context)
+    public ReceitasController(AppDbContext context, IReceitaService receitaService)
     {
         _context = context;
+        _receitaService = receitaService;
     }
 
     // Rota GET: api/receitas
@@ -42,14 +45,18 @@ public class ReceitasController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Receita>> PostReceita([FromBody] Receita receita)
     {
-        // 1. Adiciona o objeto na memória do Entity Framework
-        _context.Receitas.Add(receita);
-        
-        // 2. Executa o comando de INSERT no Supabase
-        await _context.SaveChangesAsync();
-
-        // 3. Retorna Status 201 junto com os dados da receita
-        return CreatedAtAction(nameof(GetReceitas), new { id = receita.Id }, receita);
+        try
+        {
+            // O Service faz a validação e salva no banco
+            var receitaCriada = await _receitaService.CadastrarReceitaAsync(receita);
+            
+            return CreatedAtAction(nameof(GetReceita), new { id = receitaCriada.Id }, receitaCriada);
+        }
+        catch (Exception ex)
+        {
+            // Se cair em alguma regra de negócio do Service, devolve o erro 400 com a mensagem
+            return BadRequest(new { mensagem = ex.Message });
+        }
     }
 
     // Rota PUT

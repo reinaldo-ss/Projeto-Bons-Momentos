@@ -1,15 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ConfeitariaApi.Services;
 
 [ApiController]
 [Route("api/[controller]")]
 public class UsuariosController : ControllerBase
 {
     private readonly AppDbContext _context;
+    private readonly IUsuarioService _usuarioService;
 
-    public UsuariosController(AppDbContext context)
+    public UsuariosController(AppDbContext context, IUsuarioService usuarioService)
     {
         _context = context;
+        _usuarioService = usuarioService;
     }
 
     // Rota GET: api/usuarios
@@ -38,10 +41,19 @@ public class UsuariosController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Usuario>> PostUsuario([FromBody] Usuario usuario)
     {
-        _context.Usuarios.Add(usuario);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetUsuario), new { id = usuario.Id }, usuario);
+        try
+        {
+            // O Service valida os campos obrigatórios e salva no banco
+            var usuarioCriado = await _usuarioService.CadastrarUsuarioAsync(usuario);
+            
+            // Retorna o Status 201
+            return CreatedAtAction("GetUsuario", new { id = usuarioCriado.Id }, usuarioCriado);
+        }
+        catch (Exception ex)
+        {
+            // Retorna Status 400 se faltar algum campo
+            return BadRequest(new { mensagem = ex.Message });
+        }
     }
 
     // Rota PUT
