@@ -2,6 +2,8 @@
    Roteamento da SPA
    ===================================================== */
 
+const API_URL = 'http://localhost:5041/api';
+
 // Páginas que vivem dentro de subpastas de view/ (admin/, cozinha/)
 const PAGINAS_EM_SUBPASTA = {
     admin: 'admin/admin',
@@ -630,9 +632,71 @@ document.addEventListener('input', function(e) {
    implementar a integração com o backend.
    ===================================================== */
 document.addEventListener('submit', function(e) {
+    // log de teste
+    console.log(`Evento de submit recebido. Nome do elemento que disparou: ${e.target.id}`);
+    
+    console.log(`valor do form: ${e.target.id}`);
+
     if (e.target.id === 'formCadastrarReceita') {
         e.preventDefault();
-        validarFormCadReceita();
+
+        const formValido = validarFormCadReceita();
+        if (!formValido) {
+            console.warn('Falha na validação do formulário de receita');
+            return;
+        }
+
+        const form = e.target;
+        const formData = new FormData(form);
+
+        const dadosReceita = {
+            nome: formData.get('nome'),
+            descricao: formData.get('descricao'),
+            ingredientes: formData.get('ingredientes'),
+            preco: parseFloat(formData.get('preco')) || 0
+        };
+
+        const btnSubmit = form.querySelector('button[type="submit"]');
+        const textoOriginal = btnSubmit ? btnSubmit.textContent : '';
+
+        if (btnSubmit) {
+            btnSubmit.disabled = true;
+            btnSubmit.textContent = 'Cadastrando...';
+        }
+
+        fetch(`${API_URL}/Receitas`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dadosReceita)
+        })
+        .then(async (res) => {
+            const resposta = await res.json().catch(() => null);
+
+            if (!res.ok) {
+                const mensagemErro = resposta?.mensagem || resposta?.title || 'Ocorreu um erro ao cadastrar a receita';
+                throw new Error(mensagemErro);
+            }
+
+            return resposta;
+        })
+        .then(() => {
+            alert('Receita cadastrada com sucesso!');
+            form.reset();
+            carregarPagina('admin');
+        })
+        .catch((error) => {
+            console.error('Erro na requisição:', error);
+            alert(`Não foi possível cadastrar a receita: ${error.message}`);
+        })
+        .finally(() => {
+            if (btnSubmit) {
+                btnSubmit.disabled = false;
+                btnSubmit.textContent = textoOriginal;
+            }
+        });
+
         return;
     }
 
@@ -657,7 +721,69 @@ document.addEventListener('submit', function(e) {
 
     if (e.target.id === 'formCadastrarCliente') {
         e.preventDefault();
-        validarFormCadCliente();
+        console.log('1. Interceptado formCadastrarCliente!');
+
+        // 1. Valida os campos no front-end
+        const formValido = validarFormCadCliente();
+        console.log('2. Resultado da validação do front:', formValido);
+
+        if (!formValido) {
+            console.warn('Envio cancelado: corrija os campos destacados em vermelho.');
+            return;
+        }
+
+        console.log('3. Validação aprovada! Coletando dados...');
+
+        const form = e.target;
+        const formData = new FormData(form);
+
+        // 2. Monta o objeto exatamente com os campos do formulário
+        const dadosCliente = {
+            nome: formData.get('nome'),
+            email: formData.get('email'),
+            telefone: formData.get('telefone'),
+            senha: formData.get('senha'),
+            dataNascimento: formData.get('dataNascimento'),
+            cep: formData.get('cep'),
+            cidade: formData.get('cidade'),
+            bairro: formData.get('bairro'),
+            endereco: formData.get('endereco'),
+            numero: formData.get('numero'),
+            complemento: formData.get('complemento') || ''
+        };
+
+        console.log('4. Enviando payload para a API:', dadosCliente);
+
+        // 3. Dispara a requisição POST para o backend
+        fetch(`${API_URL}/Usuarios`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dadosCliente)
+        })
+        .then(async (res) => {
+            console.log('5. Status da resposta da API:', res.status);
+            const resposta = await res.json().catch(() => null);
+
+            if (!res.ok) {
+                const msg = resposta?.mensagem || resposta?.title || 'Erro ao realizar o cadastro.';
+                throw new Error(msg);
+            }
+
+            return resposta;
+        })
+        .then((dados) => {
+            console.log('6. Usuário salvo no banco com sucesso:', dados);
+            alert('Cadastro realizado com sucesso!');
+            form.reset();
+            carregarPagina('login');
+        })
+        .catch((erro) => {
+            console.error('7. Erro na requisição:', erro);
+            alert(`Falha no cadastro: ${erro.message}`);
+        });
+
         return;
     }
 });
