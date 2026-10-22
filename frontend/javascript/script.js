@@ -702,7 +702,78 @@ document.addEventListener('submit', function(e) {
 
     if (e.target.id === 'formCadastrarMotoboy') {
         e.preventDefault();
-        validarFormCadMotoboy();
+        console.log('1. Interceptado formCadastrarMotoboy!');
+        
+        // Verificando se os campos estão válidos
+        const formValido = validarFormCadMotoboy();
+        console.log('2. Resultado da validação do front:', formValido); 
+        
+        if (!formValido) {
+            console.warn('Envio cancelado: corrija os campos destacados em vermelho.');
+            return;
+        };
+
+        console.log('3. Validação aprovada! Coletando dados...');
+
+        const form = e.target;
+        const formData = new FormData(form);
+
+        // Montando o objeto que será passado para o endpoint
+        const dadosMotoboy = {
+            nome: formData.get('nome'),
+            cpf: formData.get('cpf'),
+            telefone: formData.get('telefone'),
+            cnh: formData.get('cnh'),
+            placa: formData.get('placa'),
+            senha: formData.get('senha')
+        };
+
+        console.log('4. Enviando payload para a API:', dadosMotoboy);
+
+        const btnSubmit = form.querySelector('button[type="submit"]');
+        const textoOriginal = btnSubmit ? btnSubmit.textContent : '';
+
+        if (btnSubmit) {
+            btnSubmit.disabled = true;
+            btnSubmit.textContent = 'Cadastrando...';
+        };
+
+        // Disparando a requisição POST para o endpoint de motoboys
+        fetch(`${API_URL}/Motoboys`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dadosMotoboy)
+        })
+        .then(async (res) => {
+            console.log('Status da resposta da API:', res.status);
+            const resposta = await res.json().catch(() => null);
+
+            if (!res.ok) {
+                const msg = resposta?.mensagem || resposta?.title || 'Erro ao realizar o cadastro do motoboy.';
+                throw new Error(msg);
+            }
+
+            return resposta;
+        })
+        .then((dados) => {
+            console.log('Motoboy salvo no banco com sucesso:', dados);
+            alert('Motoboy cadastrado com sucesso!');
+            form.reset();
+            carregarPagina('motoboys'); // Redireciona de volta para a lista de motoboys
+        })
+        .catch((erro) => {
+            console.error('Erro na requisição:', erro);
+            alert(`Falha no cadastro: ${erro.message}`);
+        })
+        .finally(() => {
+            if (btnSubmit) {
+                btnSubmit.disabled = false;
+                btnSubmit.textContent = textoOriginal;
+            }
+        });
+
         return;
     }
 
