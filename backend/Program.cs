@@ -20,8 +20,21 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IReceitaService, ReceitaService>();
 builder.Services.AddScoped<IPedidoService, PedidoService>();
+builder.Services.AddScoped<IMotoboyService, MotoboyService>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("PermitirTudo", policy =>
+    {
+        policy.AllowAnyOrigin()    // Permite requisições de qualquer origem
+              .AllowAnyMethod()    // Permite todos os métodos que precisamos (GET, POST, PUT, DELETE)
+              .AllowAnyHeader();   // Permite qualquer header (como Content-Type: application/json)
+    });
+});
 
 var app = builder.Build();
+
+app.UseCors("PermitirTudo");
 
 if (app.Environment.IsDevelopment())
 {
