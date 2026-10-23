@@ -12,6 +12,7 @@ const PAGINAS_EM_SUBPASTA = {
     cadastrarReceita: 'admin/cadastrarReceita',
     cadastrarMotoBoys: 'admin/cadastrarMotoBoys',
     cozinha: 'cozinha/cozinha',
+    historicoPedidosCozinha: 'cozinha/historicoPedidosCozinha',
     enviarPedido: 'cozinha/enviarPedido'
 };
 
@@ -30,7 +31,7 @@ function carregarPagina(pagina) {
             // Rola para o topo sempre que trocar de página
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
-            if (pagina === 'cadastrarCliente' || pagina === 'login' || pagina === 'cadastrarReceita' || pagina === 'admin' || pagina === 'motoboys' || pagina === 'historicoPedidos' || pagina === 'cadastrarMotoBoys' || pagina === 'cozinha' || pagina === 'enviarPedido') {
+            if (pagina === 'cadastrarCliente' || pagina === 'login' || pagina === 'cadastrarReceita' || pagina === 'admin' || pagina === 'motoboys' || pagina === 'historicoPedidos' || pagina === 'cadastrarMotoBoys' || pagina === 'cozinha' || pagina === 'historicoPedidosCozinha' || pagina === 'enviarPedido') {
                 header.style.display = 'none';
                 if (headerLogado) headerLogado.style.display = 'none';
                 footer.style.display = 'none';
@@ -46,8 +47,6 @@ function carregarPagina(pagina) {
                 preencherDadosConta();
             } else if (pagina === 'cadastrarCliente') {
                 preencherFormularioEdicaoConta();
-            } else if (pagina === 'cozinha') {
-                cz_selecionarSecao('pedidos');
             }
         });
 }
@@ -79,11 +78,13 @@ function inicializarCarrossel() {
     window._carrosselTimer = setInterval(() => window.moverCarrossel(1), 5000);
 }
 
+/* AQUI */
+
 /* ===== Painel Cozinha ===== */
 
 // Monta o caminho do partial considerando se a página já foi aberta diretamente
 // de dentro de view/cozinha/ (teste isolado) ou carregada via SPA a partir da raiz (index.html)
-function cz_caminhoView(arquivo) {
+/*function cz_caminhoView(arquivo) {
     const estaDentroDeView = window.location.pathname.includes('/view/');
     return estaDentroDeView ? `${arquivo}.html` : `view/cozinha/${arquivo}.html`;
 }
@@ -120,6 +121,8 @@ function cz_selecionarSecao(secao, elClicado) {
             area.innerHTML = '<p>Erro ao carregar conteúdo.</p>';
         });
 }
+*/
+/* ACABA AQUI */
 
 /* ===== Simulação de login (estado local, sem API) ===== */
 function aplicarEstadoLogin() {

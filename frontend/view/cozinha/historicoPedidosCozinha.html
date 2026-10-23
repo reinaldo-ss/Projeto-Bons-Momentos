@@ -1,35 +1,96 @@
-<!-- Partial carregado via fetch por cozinha.html — não é uma página independente -->
-<div class="cz-historico-conteudo">
-    <div class="admin-tabela-wrapper">
-        <table class="admin-tabela">
-            <thead>
-                <tr>
-                    <th>ID Usuário</th>
-                    <th>ID Receita</th>
-                    <th>Observação</th>
-                    <th>Opção de Pagamento</th>
-                    <th>Status</th>
-                    <th>Data do Pedido</th>
-                </tr>
-            </thead>
-            <tbody id="corpo-tabela-pedidos">
-                <tr>
-                    <td>11</td>
-                    <td>1</td>
-                    <td class="tabela-texto-truncado" title="Aniversário, escrever &quot;Parabéns&quot;">Aniversário, escrever "Parabéns"</td>
-                    <td>PIX</td>
-                    <td><span class="status-pill status-entregue">Entregue</span></td>
-                    <td>2026-09-05</td>
-                </tr>
-                <tr>
-                    <td>12</td>
-                    <td>3</td>
-                    <td class="tabela-texto-truncado" title="-">-</td>
-                    <td>Dinheiro</td>
-                    <td><span class="status-pill status-cancelado">Cancelado</span></td>
-                    <td>2026-09-03</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bons Momentos - Histórico da Cozinha</title>
+
+    <!-- Importações -->
+    <script src="../../javascript/script.js" defer></script>
+    <link rel="stylesheet" href="../../css/styleGlobal.css">
+    <link rel="stylesheet" href="../../css/styleAdmin.css">
+    <link rel="stylesheet" href="../../css/styleCozinha.css">
+    <link rel="stylesheet" href="../../css/styleHistoricoCozinha.css">
+</head>
+<body>
+    <!-- Cabeçalho da cozinha -->
+    <section id="secao-header-cozinha" class="cor_fundo">
+        <header class="cz-cabecalho content-section">
+            <div class="cz-orientacao-logo">
+                <img src="./img/logo-vm-branco.png" onerror="this.onerror=null; this.src='../../img/logo-vm-branco.png';" class="logo" alt="Logo Bons Momentos">
+                <div>
+                    <h3>Bons Momentos</h3>
+                    <p>Painel da Cozinha</p>
+                </div>
+            </div>
+
+            <div class="cz-usuario">
+                <div class="cz-identidade">
+                    <span class="cz-avatar">C</span>
+                    <div class="cz-info">
+                        <p class="cz-nome">Cozinha</p>
+                        <p class="cz-cargo">Preparo de pedidos</p>
+                    </div>
+                </div>
+                <button class="cz-btn-sair" onclick="fazerLogout()">Sair</button>
+            </div>
+        </header>
+    </section>
+
+    <!-- Área principal: Histórico + menu lateral -->
+    <section>
+        <div class="content-section cz-conteudo-cozinha">
+
+            <div class="cz-topo-secao">
+                <h1 class="cz-titulo-pagina" id="cz-titulo-secao">Histórico de Pedidos</h1>
+                <p class="cz-subtitulo-pagina" id="cz-subtitulo-secao">Acompanhe todos os pedidos já finalizados pela cozinha</p>
+            </div>
+
+            <div class="cz-layout">
+                <!-- Conteúdo fixo do Histórico -->
+                <div id="cz-area-principal" class="cz-area-principal">
+                    <div class="cz-historico-conteudo">
+                        <div class="admin-tabela-wrapper">
+                            <table class="admin-tabela">
+                                <thead>
+                                    <tr>
+                                        <th>ID Usuário</th>
+                                        <th>ID Receita</th>
+                                        <th>Observação</th>
+                                        <th>Opção de Pagamento</th>
+                                        <th>Status</th>
+                                        <th>Data do Pedido</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="corpo-tabela-pedidos">
+                                    <tr>
+                                        <td>11</td>
+                                        <td>1</td>
+                                        <td class="tabela-texto-truncado" title="Aniversário, escrever &quot;Parabéns&quot;">Aniversário, escrever "Parabéns"</td>
+                                        <td>PIX</td>
+                                        <td><span class="status-pill status-entregue">Entregue</span></td>
+                                        <td>2026-09-05</td>
+                                    </tr>
+                                    <tr>
+                                        <td>12</td>
+                                        <td>3</td>
+                                        <td class="tabela-texto-truncado" title="-">-</td>
+                                        <td>Dinheiro</td>
+                                        <td><span class="status-pill status-cancelado">Cancelado</span></td>
+                                        <td>2026-09-03</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <nav class="cz-menu-lateral">
+                    <a href="cozinha.html" class="cz-menu-item" onclick="if(document.getElementById('conteudo')){ event.preventDefault(); carregarPagina('cozinha'); }">Pedidos</a>
+                    <a href="historicoPedidosCozinha.html" class="cz-menu-item ativo">Histórico de Pedidos</a>
+                </nav>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

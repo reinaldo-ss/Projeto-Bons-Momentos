@@ -1,0 +1,91 @@
+/* ===== Histórico de Pedidos da Cozinha ===== */
+
+/* Remove sublinhado padrão de links com href no menu lateral */
+.cz-menu-item {
+    text-decoration: none;
+    display: block;
+}
+
+.cz-historico-conteudo {
+    width: 100%;
+}
+
+/* ----- Wrapper e Tabela do Histórico ----- */
+.cz-historico-conteudo .admin-tabela-wrapper {
+    background-color: var(--bm-branco);
+    border: 1px solid #e4e8f0;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    overflow-x: auto;
+}
+
+.cz-historico-conteudo .admin-tabela {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 13px;
+}
+
+.cz-historico-conteudo .admin-tabela thead tr {
+    background-color: var(--bm-terracota);
+    color: var(--bm-branco);
+}
+
+.cz-historico-conteudo .admin-tabela th {
+    padding: 14px 18px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.cz-historico-conteudo .admin-tabela td {
+    padding: 14px 18px;
+    color: #334155;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+}
+
+.cz-historico-conteudo .admin-tabela tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.cz-historico-conteudo .admin-tabela tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+.cz-historico-conteudo .tabela-texto-truncado {
+    max-width: 260px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ----- Badges / Pills de Status ----- */
+.cz-historico-conteudo .status-pill {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.cz-historico-conteudo .status-entregue {
+    background-color: #d1fae5;
+    color: #16a34a;
+}
+
+.cz-historico-conteudo .status-cancelado {
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+
+/* ----- Responsividade da Tabela ----- */
+@media (max-width: 900px) {
+    .cz-historico-conteudo .admin-tabela th,
+    .cz-historico-conteudo .admin-tabela td {
+        padding: 10px 12px;
+    }
+}
