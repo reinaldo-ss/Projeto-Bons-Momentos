@@ -19,10 +19,10 @@ namespace ConfeitariaApi.Services
                 throw new Exception("É obrigatório enviar 1 imagem para a receita.");
             }
 
-            if (receita.Foto.Contains(",") || receita.Foto.Contains(";"))
-            {
-                throw new Exception("Apenas uma imagem é permitida por receita. Certifique-se de enviar apenas uma imagem.");
-            }
+            // if (receita.Foto.Contains(",") || receita.Foto.Contains(";"))
+            // {
+            //     throw new Exception("Apenas uma imagem é permitida por receita. Certifique-se de enviar apenas uma imagem.");
+            // }
 
             _context.Receitas.Add(receita);
             await _context.SaveChangesAsync();

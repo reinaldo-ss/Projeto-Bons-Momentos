@@ -651,6 +651,8 @@ document.addEventListener('submit', function(e) {
 
         const form = e.target;
         const formData = new FormData(form);
+        const inputFoto = document.getElementById('foto');
+        const arquivoFoto = inputFoto.files[0];
 
         const dadosReceita = {
             nome: formData.get('nome'),
@@ -667,38 +669,71 @@ document.addEventListener('submit', function(e) {
             btnSubmit.textContent = 'Cadastrando...';
         }
 
-        fetch(`${API_URL}/Receitas`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(dadosReceita)
-        })
-        .then(async (res) => {
-            const resposta = await res.json().catch(() => null);
+        // Instanciando um conversor para Base64
+        const reader = new FileReader();
 
-            if (!res.ok) {
-                const mensagemErro = resposta?.mensagem || resposta?.title || 'Ocorreu um erro ao cadastrar a receita';
-                throw new Error(mensagemErro);
-            }
+        reader.onload = (evento) => {
+            // Convertendo a imagem para Base64
+            const base64String = evento.target.result;
 
-            return resposta;
-        })
-        .then(() => {
-            alert('Receita cadastrada com sucesso!');
-            form.reset();
-            carregarPagina('admin');
-        })
-        .catch((error) => {
-            console.error('Erro na requisição:', error);
-            alert(`Não foi possível cadastrar a receita: ${error.message}`);
-        })
-        .finally(() => {
+            const dadosReceita = {
+                nome: formData.get('nome'),
+                descricao: formData.get('descricao'),
+                ingredientes: formData.get('ingredientes'),
+                preco: parseFloat(formData.get('preco')) || 0,
+                foto: base64String
+            };
+
+            if (btnSubmit) btnSubmit.textContent = 'Cadastrando...';
+
+            fetch(`${API_URL}/Receitas`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dadosReceita)
+            })
+            .then(async (res) => {
+                const resposta = await res.json().catch(() => null);
+                if (!res.ok) {
+                    const mensagemErro = resposta?.mensagem || resposta?.title || 'Erro ao cadastrar a receita';
+                    throw new Error(mensagemErro);
+                }
+                return resposta;
+            })
+            .then(() => {
+                alert('Receita cadastrada com sucesso!');
+                form.reset();
+                // Limpa o preview da imagem
+                const preview = document.getElementById('preview-foto');
+                const placeholder = document.querySelector('.upload-placeholder-cad-receita');
+                if (preview) { preview.src = ''; preview.style.display = 'none'; }
+                if (placeholder) placeholder.style.display = 'flex';
+                
+                carregarPagina('admin');
+            })
+            .catch((error) => {
+                console.error('Erro na requisição:', error);
+                alert(`Não foi possível cadastrar: ${error.message}`);
+            })
+            .finally(() => {
+                if (btnSubmit) {
+                    btnSubmit.disabled = false;
+                    btnSubmit.textContent = textoOriginal;
+                }
+            });
+        };
+
+        if (arquivoFoto) {
+            reader.readAsDataURL(arquivoFoto);
+        } else {
+            alert("Erro: Foto não encontrada");
+
             if (btnSubmit) {
                 btnSubmit.disabled = false;
                 btnSubmit.textContent = textoOriginal;
             }
-        });
+        }
 
         return;
     }
