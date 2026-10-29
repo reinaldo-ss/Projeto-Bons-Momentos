@@ -37,6 +37,20 @@ public class UsuariosController : ControllerBase
         return Ok(usuario);
     }
 
+    [HttpPost("login")]
+    public async Task<ActionResult<Usuario>> Login([FromBody] LoginRequest loginRequest)
+    {
+        var usuario = await _context.Usuarios
+        .FirstOrDefaultAsync(u => u.Email == loginRequest.Email && u.Senha == loginRequest.Senha);
+    
+        if (usuario == null)
+        {
+            return Unauthorized(new { mensagem = "Email ou senha incorretos." });
+        }
+
+        return Ok(usuario);
+    }
+
     // Rota POST
     [HttpPost]
     public async Task<ActionResult<Usuario>> PostUsuario([FromBody] Usuario usuario)
@@ -107,4 +121,11 @@ public class UsuariosController : ControllerBase
     {
         return _context.Usuarios.Any(e => e.Id == id);
     }
+
+}
+
+public class LoginRequest
+{
+    public string Email { get; set; }
+    public string Senha { get; set; }
 }

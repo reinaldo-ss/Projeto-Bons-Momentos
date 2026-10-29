@@ -774,7 +774,8 @@ document.addEventListener('input', function(e) {
    preenchidos, formatos corretos etc). O envio real dos
    dados para a API é responsabilidade de quem for
    implementar a integração com o backend.
-   Edit: Eu mesmo, Henrique na área bb
+   Edit: Eu mesmo, Henrique na área bb, e os dados são enviados
+   daq msm
    ===================================================== */
 document.addEventListener('submit', function(e) {
     // log de teste
@@ -1058,7 +1059,65 @@ document.addEventListener('submit', function(e) {
         });
 
         return;
-    }
+    };
+
+    if (e.target.id === 'formLogin') {
+        e.preventDefault();
+
+        const form = e.target;
+        const formData = new FormData(form);
+        const email = formData.get('email');
+        const senha = formData.get('senha');
+
+        const btnSubmit = form.querySelector('button[type="submit"]');
+        const textoOriginal = btnSubmit ? btnSubmit.textContent : 'Entrar';
+
+        if (btnSubmit) {
+            btnSubmit.disabled = true;
+            btnSubmit.textContent = 'Autenticando...';
+        }
+
+        // Disparando requisição para a rota de login da sua API
+        fetch(`${API_URL}/Usuarios/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            
+            body: JSON.stringify({ email: email, senha: senha })
+        })
+        .then(async (res) => {
+            const resposta = await res.json().catch(() => null);
+            if (!res.ok) {
+                throw new Error(resposta?.mensagem || 'E-mail ou senha incorretos.');
+            }
+            // A API deve retornar o objeto do usuário logado em caso de sucesso
+            return resposta;
+        })
+        .then((usuario) => {
+            // Salva o estado e os dados reais do usuário na memória do navegador
+            localStorage.setItem('vm_logado', 'true');
+            localStorage.setItem('vm_usuario', JSON.stringify(usuario));
+
+            // Atualiza a interface gráfica do cabeçalho (troca o botão Entrar pelo Avatar)
+            aplicarEstadoLogin();
+
+            // Redireciona para o cardápio
+            carregarPagina('cardapio');
+        })
+        .catch((erro) => {
+            console.error('Erro no login:', erro);
+            alert(`Falha na autenticação: ${erro.message}`);
+        })
+        .finally(() => {
+            if (btnSubmit) {
+                btnSubmit.disabled = false;
+                btnSubmit.textContent = textoOriginal;
+            }
+        });
+
+        return;
+    };
 
     if (e.target.id === 'formCadastrarCliente') {
         e.preventDefault();
@@ -1071,12 +1130,15 @@ document.addEventListener('submit', function(e) {
         if (!formValido) {
             console.warn('Envio cancelado: corrija os campos destacados em vermelho.');
             return;
-        }
+        };
 
         console.log('3. Validação aprovada! Coletando dados...');
 
         const form = e.target;
         const formData = new FormData(form);
+
+        // Verificando se o fluxo de edição foi ativado
+        const idEdicao = localStorage.getItem('vm_usuario_edicao');
 
         // 2. Monta o objeto exatamente com os campos do formulário
         const dadosCliente = {
@@ -1093,37 +1155,69 @@ document.addEventListener('submit', function(e) {
             complemento: formData.get('complemento') || ''
         };
 
+        // Se estiver em edição, pegamos o ID para enviar junto do objeto acima pro C#
+        // que exige que o ID esteja presente pra fazer o PUT
+        if (idEdicao) {
+            dadosCliente.id = parseInt(idEdicao);
+        };
+
+        // Decidindo qual o método que será usado na requisição
+        const metodoRequisicao = idEdicao ? 'PUT' : 'POST';
+
+        // Definindo a URL que será usada na requisição
+        const urlRequisicao = idEdicao
+        ? `${API_URL}/Usuarios/${idEdicao}`
+        : `${API_URL}/Usuarios`;
+
+        const btnSubmit = form.querySelector('button[type="submit"]');
+        const textoOriginal = btnSubmit ? btnSubmit.textContent : '';
+        if (btnSubmit) { btnSubmit.disabled = true; btnSubmit.textContent = 'Enviando...'; }
+
         console.log('4. Enviando payload para a API:', dadosCliente);
 
         // 3. Dispara a requisição POST para o backend
-        fetch(`${API_URL}/Usuarios`, {
-            method: 'POST',
+        fetch(urlRequisicao, {
+            method: metodoRequisicao,
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(dadosCliente)
         })
         .then(async (res) => {
-            console.log('5. Status da resposta da API:', res.status);
-            const resposta = await res.json().catch(() => null);
 
             if (!res.ok) {
-                const msg = resposta?.mensagem || resposta?.title || 'Erro ao realizar o cadastro.';
-                throw new Error(msg);
+                const resposta = await res.json().catch(() => null);
+                throw new Error(resposta?.mensagem || 'Erro na operação.');
             }
 
-            return resposta;
+            // Não retornamos nada se o usuário tiver atualizado seu cadastro
+            return idEdicao ? null : res.json();
         })
         .then((dados) => {
-            console.log('6. Usuário salvo no banco com sucesso:', dados);
-            alert('Cadastro realizado com sucesso!');
-            form.reset();
-            carregarPagina('login');
+            if (idEdicao) {
+                console.log('Usuario atualizado com sucesso!');
+                Alert('Conta atualizada com sucesso!');
+                // Atualizando o localStorage do usuário com os dados novos e limpando a flag
+                localStorage.setItem('vm_usuario', JSON.stringify(dadosCliente));
+                localStorage.removeItem('vm_usuario_edicao');
+            } else {
+                console.log('Usuário salvo no banco com sucesso:', dados);
+                //alert('Cadastro realizado com sucesso!');
+                form.reset();
+                carregarPagina('login');
+            }
+            
         })
         .catch((erro) => {
-            console.error('7. Erro na requisição:', erro);
+            console.error('Erro na requisição:', erro);
             alert(`Falha no cadastro: ${erro.message}`);
-        });
+        })
+        .finally(() => {
+            if (btnSubmit) {
+                btnSubmit.disabled = false;
+                btnSubmit.textContent = textoOriginal;
+            };
+        })
 
         return;
     }
