@@ -26,7 +26,7 @@
 
     background-image:
         linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-        url('../img/carro-tela-cadastro.jpg');
+        url('../img/tela-cadastro.jpg');
 
     background-position: center;
     background-size: cover;
@@ -51,14 +51,14 @@
 }
 
 #texto-central-cad-cliente {
-    gap: 10px;
     display: flex;
+    align-items: center;
     color: white;
     margin-bottom: 120px;
 }
 
-#titulo-logo-cad-cliente {
-    font-weight: bold;
+.titulo-logo-cad-cliente {
+    font-size: 20px;
 }
 
 /* Div que engloba os itens do cadastro */

@@ -23,7 +23,7 @@
     
     background-image:
     linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-    url('../img/carro-tela-cadastro.jpg');
+    url('../img/tela-cadastro.jpg');
     
     background-position: center;
     background-size: cover;
@@ -48,7 +48,7 @@
 
 #texto-central-login {
     color: white;
-    margin-bottom: 100px;
+    margin-bottom: 60px;
 }
 
 #titulo-login {

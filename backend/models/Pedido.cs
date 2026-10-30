@@ -30,5 +30,5 @@ public class Pedido
     public decimal ValorTotal { get; set; }
 
     [Column("data_pedido")]
-    public DateTime DataPedido { get; set; } = DateTime.UtcNow;
+    public DateTime DataPedido { get; set; } = DateTime.Now;
 }

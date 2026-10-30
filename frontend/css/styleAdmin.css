@@ -15,13 +15,13 @@
 
 .orientacao-logo-admin h3 {
     color: var(--bm-marrom-escuro);
-    font-size: 18px;
+    font-size: 22px;
     margin: 0;
 }
 
 .orientacao-logo-admin p {
     color: var(--bm-marrom-medio);
-    font-size: 12px;
+    font-size: 16px;
     margin: 0;
     letter-spacing: 0.5px;
 }

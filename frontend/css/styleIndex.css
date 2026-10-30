@@ -6,27 +6,19 @@
 .orientacao-logo {
     display: flex;
     align-items: center;
-    gap: 15px;
 }
 
 .orientacao-logo h3 {
     color: var(--bm-marrom-escuro);
-    font-size: 18px;
-    margin: 0;
-}
-
-.orientacao-logo p {
-    color: var(--bm-marrom-medio);
-    font-size: 12px;
-    margin: 0;
-    letter-spacing: 0.3px;
+    font-size: 22px;
+    margin: 4px 0 0 0;
 }
 
 .cabecalho {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 20px;
+    gap: 100px;
 }
 
 .cabecalho a {
@@ -48,6 +40,7 @@
     display: flex;
     gap: 8px;
     padding: 10px;
+    margin-top: 6px;
 }
 
 .btn-todos {

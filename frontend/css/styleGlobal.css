@@ -55,11 +55,11 @@ body {
 }
 
 .logo {
-    height: 40px;
+    height: 60px;
 }
 
 .logo2 {
-    height: 60px;
+    height: 100px;
 }
 
 a {
@@ -76,3 +76,10 @@ section, .content-section {
     max-width: 100%;
 }
 
+/* Fonte */
+
+.berkshire-swash-regular {
+  font-family: "Berkshire Swash", serif;
+  font-weight: 400;
+  font-style: normal;
+}

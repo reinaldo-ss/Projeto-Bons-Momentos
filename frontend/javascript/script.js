@@ -43,10 +43,13 @@ function carregarPagina(pagina) {
             // GATILHOS DAS PÁGINAS (apenas UI/estado local — sem chamadas à API)
             if (pagina === 'cardapio') {
                 inicializarCarrossel();
+                carregarReceitas();
             } else if (pagina === 'conta') {
                 preencherDadosConta();
             } else if (pagina === 'cadastrarCliente') {
                 preencherFormularioEdicaoConta();
+            } else if (pagina === 'finalCompra') {
+                carregarDadosFinalCompra();
             }
         });
 }
@@ -146,8 +149,8 @@ function aplicarEstadoLogin() {
         }
     } else {
         // Se NÃO está logado, mostra o botão de entrar e esconde o perfil
-        headerComPerfil.style.display = 'none';
-        headerComBotaoEntrar.style.display = '';
+        if (headerComPerfil) headerComPerfil.style.display = 'none';
+        if (headerComBotaoEntrar) headerComBotaoEntrar.style.display = '';
     }
 }
 
@@ -537,7 +540,145 @@ function validarFormCadMotoboy() {
         if (msg) valido = false;
     });
     return valido;
-}
+};
+
+/* ===== Função de Carregamento da Vitrine (Cardápio) ===== */
+function carregarReceitas() {
+
+    console.log('[DEBUG] 1. Função carregarReceitas() iniciada.');
+
+    // Localizando os elementos visuais
+    const catalogo = document.getElementById('catalogo-receitas');
+    const contador = document.getElementById('contador-receitas');
+    if (!catalogo) {
+        console.error('[DEBUG] X. Elemento "catalogo-receitas" NÃO encontrado no DOM! O script parou.');
+        return;
+    }
+
+    console.log('[DEBUG] 2. DOM encontrado. Disparando fetch para a API...');
+    catalogo.innerHTML = '<p style="grid-column: 1 / -1; text-align: center;">Carregando cardápio...</p>';
+
+    // Conectando com a rota da API que busca as receitas no banco
+    fetch(`${API_URL}/Receitas`)
+        .then(res => {
+            console.log(`[DEBUG] 3. Resposta recebida da API. Status: ${res.status}`);
+            if (!res.ok) throw new Error(`Falha ao buscar as receitas (Status: ${res.status})`);
+            return res.json();
+        })
+        .then(receitas => {
+            console.log('[DEBUG] 4. Dados convertidos para JSON:', receitas);
+
+            if (contador) {
+                contador.textContent = `${receitas.length} receita(s) encontrada(s)`;
+            }
+
+            catalogo.innerHTML = '';
+
+            if (receitas.length === 0) {
+                console.log('[DEBUG] 5. Array de receitas vazio.');
+                catalogo.innerHTML = '<p style="grid-column: 1 / -1; text-align: center;">Nenhuma receita disponível no momento.</p>';
+                return;
+            }
+
+            console.log(`[DEBUG] 6. Renderizando ${receitas.length} receitas no HTML...`);
+            receitas.forEach(receita => {
+                // Formata o valor numérico para a moeda local (R$)
+                const precoFormatado = receita.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                // Fallback caso a receita venha sem foto do banco
+                const srcImagem = receita.foto ? receita.foto : 'https://placehold.co/400x250?text=Sem+Foto';
+
+                const divCard = document.createElement('div');
+                divCard.className = 'card-receita';
+                
+                // Ao clicar, envia os dados para a função de transição
+                divCard.onclick = () => selecionarReceita(receita.id, receita.nome, receita.preco, srcImagem);
+
+                divCard.innerHTML = `
+                    <div class="card-img">
+                        <img src="${srcImagem}" alt="${receita.nome}" />
+                    </div>
+                    <div class="card-info">
+                        <h3>${receita.nome}</h3>
+                        <p class="card-ingredientes">${receita.ingredientes}</p>
+                        <p class="card-preco">${precoFormatado}</p>
+                    </div>
+                `;
+                catalogo.appendChild(divCard);
+            });
+            console.log('[DEBUG] 7. Renderização concluída com sucesso.');
+
+        })
+        .catch(erro => {
+            console.error('[DEBUG] X. Erro capturado no catch:', erro);
+            catalogo.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: red;">Erro ao carregar o cardápio. Tente novamente.</p>';
+            if (contador) contador.textContent = '0 receitas encontradas';
+        });
+};
+
+/* Função que salva os dados da receita no localStorage do navegador */
+function selecionarReceita(id, nome, preco, foto) {
+    console.log(`[DEBUG] Clicou na receita: ID=${id} | Nome=${nome} | Preço=${preco}`);
+
+    const receitaSelecionada = {
+        id: id,
+        nome: nome,
+        preco: preco,
+        foto: foto
+    };
+    
+    // Salva a receita selecionada na memória local do navegador
+    localStorage.setItem('vm_pedido_atual', JSON.stringify(receitaSelecionada));
+    console.log('[DEBUG] Salvo no localStorage. Roteando para finalCompra...');
+
+    // Dispara a rota para a tela de finalizar compra
+    carregarPagina('finalCompra');
+};
+
+/* ===== Carregamento da Tela de Finalizar Compra ===== */
+function carregarDadosFinalCompra() {
+    // Localizando e guardando os arquivos que guardam os dados do pedido atual
+    const pedidoString = localStorage.getItem('vm_pedido_atual');
+    const usuarioString = localStorage.getItem('vm_usuario');
+
+    // Se não há pedido armazenado em localStorage
+    if (!pedidoString) {
+        alert("Nenhuma receita selecionada.");
+        carregarPagina('cardapio');
+        return;
+    }
+
+    // Se não há nenhum usuário logado no momento da compra
+    // if (!usuarioString) {
+    //     alert("Você precisa estar logado para finalizar um pedido.");
+    //     carregarPagina('cadastrarCliente'); // Rota de login/cadastro
+    //     return;
+    // }
+
+    // Transformando os valores adquiridos em objetos 
+    const pedido = JSON.parse(pedidoString);
+    const usuario = JSON.parse(usuarioString);
+
+    // 1. Preenche os dados da receita
+    const precoFormatado = pedido.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    
+    const imgEl = document.getElementById('compra-foto');
+    if (imgEl) imgEl.src = pedido.foto; // Puxa a string Base64 do localStorage
+    
+    document.getElementById('compra-nome').textContent = pedido.nome;
+    document.getElementById('compra-preco').textContent = precoFormatado;
+    document.getElementById('compra-resumo-preco').textContent = precoFormatado;
+    document.getElementById('compra-total').textContent = precoFormatado;
+
+    // 2. Preenche o endereço do cliente
+    const rua = usuario.endereco || usuario.Endereco || 'Endereço não informado';
+    const num = usuario.numero || usuario.Numero || 'S/N';
+    const bairro = usuario.bairro || usuario.Bairro || '';
+    const cidade = usuario.cidade || usuario.Cidade || '';
+    const cep = usuario.cep || usuario.Cep || '';
+    
+    const enderecoCompleto = `${rua}, ${num} - ${bairro}, ${cidade} - CEP ${cep}`;
+    document.getElementById('compra-endereco-texto').textContent = enderecoCompleto;
+};
 
 // Valida campo ao sair dele (focusout borbulha, blur não)
 document.addEventListener('focusout', function(e) {
@@ -633,6 +774,8 @@ document.addEventListener('input', function(e) {
    preenchidos, formatos corretos etc). O envio real dos
    dados para a API é responsabilidade de quem for
    implementar a integração com o backend.
+   Edit: Eu mesmo, Henrique na área bb, e os dados são enviados
+   daq msm
    ===================================================== */
 document.addEventListener('submit', function(e) {
     // log de teste
@@ -651,6 +794,8 @@ document.addEventListener('submit', function(e) {
 
         const form = e.target;
         const formData = new FormData(form);
+        const inputFoto = document.getElementById('foto');
+        const arquivoFoto = inputFoto.files[0];
 
         const dadosReceita = {
             nome: formData.get('nome'),
@@ -667,38 +812,71 @@ document.addEventListener('submit', function(e) {
             btnSubmit.textContent = 'Cadastrando...';
         }
 
-        fetch(`${API_URL}/Receitas`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(dadosReceita)
-        })
-        .then(async (res) => {
-            const resposta = await res.json().catch(() => null);
+        // Instanciando um conversor para Base64
+        const reader = new FileReader();
 
-            if (!res.ok) {
-                const mensagemErro = resposta?.mensagem || resposta?.title || 'Ocorreu um erro ao cadastrar a receita';
-                throw new Error(mensagemErro);
-            }
+        reader.onload = (evento) => {
+            // Convertendo a imagem para Base64
+            const base64String = evento.target.result;
 
-            return resposta;
-        })
-        .then(() => {
-            alert('Receita cadastrada com sucesso!');
-            form.reset();
-            carregarPagina('admin');
-        })
-        .catch((error) => {
-            console.error('Erro na requisição:', error);
-            alert(`Não foi possível cadastrar a receita: ${error.message}`);
-        })
-        .finally(() => {
+            const dadosReceita = {
+                nome: formData.get('nome'),
+                descricao: formData.get('descricao'),
+                ingredientes: formData.get('ingredientes'),
+                preco: parseFloat(formData.get('preco')) || 0,
+                foto: base64String
+            };
+
+            if (btnSubmit) btnSubmit.textContent = 'Cadastrando...';
+
+            fetch(`${API_URL}/Receitas`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dadosReceita)
+            })
+            .then(async (res) => {
+                const resposta = await res.json().catch(() => null);
+                if (!res.ok) {
+                    const mensagemErro = resposta?.mensagem || resposta?.title || 'Erro ao cadastrar a receita';
+                    throw new Error(mensagemErro);
+                }
+                return resposta;
+            })
+            .then(() => {
+                alert('Receita cadastrada com sucesso!');
+                form.reset();
+                // Limpa o preview da imagem
+                const preview = document.getElementById('preview-foto');
+                const placeholder = document.querySelector('.upload-placeholder-cad-receita');
+                if (preview) { preview.src = ''; preview.style.display = 'none'; }
+                if (placeholder) placeholder.style.display = 'flex';
+                
+                carregarPagina('admin');
+            })
+            .catch((error) => {
+                console.error('Erro na requisição:', error);
+                alert(`Não foi possível cadastrar: ${error.message}`);
+            })
+            .finally(() => {
+                if (btnSubmit) {
+                    btnSubmit.disabled = false;
+                    btnSubmit.textContent = textoOriginal;
+                }
+            });
+        };
+
+        if (arquivoFoto) {
+            reader.readAsDataURL(arquivoFoto);
+        } else {
+            alert("Erro: Foto não encontrada");
+
             if (btnSubmit) {
                 btnSubmit.disabled = false;
                 btnSubmit.textContent = textoOriginal;
             }
-        });
+        }
 
         return;
     }
@@ -782,16 +960,164 @@ document.addEventListener('submit', function(e) {
 
     if (e.target.id === 'formFinalCompra') {
         e.preventDefault();
-        const formData = new FormData(e.target);
+
+        // Coletando os dados do formulário
+        const form = e.target;
+        const formData = new FormData(form);
         const opcaoPagamento = formData.get('opcaoPagamento');
+        const observacao = document.getElementById('observacao').value || '';
         const erroPagamentoEl = document.getElementById('erro-opcaoPagamento');
+
+        // Se não há uma opção de pagamento e mudando o text do componente
         if (!opcaoPagamento) {
             if (erroPagamentoEl) erroPagamentoEl.textContent = 'Selecione uma forma de pagamento';
+            return;
         } else if (erroPagamentoEl) {
             erroPagamentoEl.textContent = '';
         }
+
+        console.log(`Valor enviado como opção de pagamento: ${opcaoPagamento}`);
+
+        // Pegando os dados do pedido e do usuário da memória localStorage do navegador
+        const pedidoString = localStorage.getItem('vm_pedido_atual');
+        const usuarioString = localStorage.getItem('vm_usuario');
+
+        // Se não tiver pedido o fluxo é finalizado
+        if (!pedidoString) return;
+
+        const receita = JSON.parse(pedidoString);
+        // Variável temporária só pra teste (apagar dps)
+        let usuarioId = 1; 
+        //
+        let enderecoEntrega = 'Endereço de teste';
+
+        // Tenta montar o endereço real se o cliente estiver logado
+        if (usuarioString) {
+            const usuario = JSON.parse(usuarioString);
+            usuarioId = usuario.id || usuario.Id || 1;
+            const rua = usuario.endereco || usuario.Endereco || '';
+            const num = usuario.numero || usuario.Numero || 'S/N';
+            const bairro = usuario.bairro || usuario.Bairro || '';
+            const cidade = usuario.cidade || usuario.Cidade || '';
+            const cep = usuario.cep || usuario.Cep || '';
+            enderecoEntrega = `${rua}, ${num} - ${bairro}, ${cidade} - CEP ${cep}`;
+        }
+
+        // Monta o objeto respeitando a estrutura da tabela PEDIDOS definida no Supabase
+        const payloadPedido = {
+            idUsuario: usuarioId,
+            idReceita: receita.id,
+            observacao: observacao,
+            enderecoEntrega: enderecoEntrega,
+            opcaoPagamento: opcaoPagamento,
+            status: 'Pendente',
+            valorTotal: receita.preco
+        };
+
+        const btnSubmit = form.querySelector('button[type="submit"]');
+        const textoOriginal = btnSubmit ? btnSubmit.textContent : 'Finalizar Pedido';
+
+        // considerações secundárias ao enviar o pedido
+        if (btnSubmit) {
+            btnSubmit.disabled = true;
+            btnSubmit.textContent = 'Enviando...';
+        }
+
+        // Disparaando requisição POST pra API
+        fetch(`${API_URL}/Pedidos`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payloadPedido)
+        })
+        .then(async (res) => {
+            const resposta = await res.json().catch(() => null);
+            // Se a requisição deu problema, recebemos a mensagem e disparamos o erro
+            if (!res.ok) {
+                const msg = resposta?.mensagem || resposta?.title || 'Erro ao finalizar o pedido.';
+                throw new Error(msg);
+            }
+            // Se deu certo retorna a resposta da requisição
+            return resposta;
+        })
+        .then((dados) => {
+            alert('Pedido realizado com sucesso!');
+            localStorage.removeItem('vm_pedido_atual'); // Limpa o carrinho de pedidos da memória
+            carregarPagina('cardapio'); // Envia para a página inicial
+        })
+        .catch((erro) => {
+            console.error('Erro na requisição:', erro);
+            alert(`Falha ao enviar pedido: ${erro.message}`);
+        })
+        .finally(() => {
+            // Volta a tela ao que era antes
+            if (btnSubmit) {
+                btnSubmit.disabled = false;
+                btnSubmit.textContent = textoOriginal;
+            }
+        });
+
         return;
-    }
+    };
+
+    if (e.target.id === 'formLogin') {
+        e.preventDefault();
+
+        const form = e.target;
+        const formData = new FormData(form);
+        const email = formData.get('email');
+        const senha = formData.get('senha');
+
+        const btnSubmit = form.querySelector('button[type="submit"]');
+        const textoOriginal = btnSubmit ? btnSubmit.textContent : 'Entrar';
+
+        if (btnSubmit) {
+            btnSubmit.disabled = true;
+            btnSubmit.textContent = 'Autenticando...';
+        }
+
+        // Disparando requisição para a rota de login da sua API
+        fetch(`${API_URL}/Usuarios/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            
+            body: JSON.stringify({ email: email, senha: senha })
+        })
+        .then(async (res) => {
+            const resposta = await res.json().catch(() => null);
+            if (!res.ok) {
+                throw new Error(resposta?.mensagem || 'E-mail ou senha incorretos.');
+            }
+            // A API deve retornar o objeto do usuário logado em caso de sucesso
+            return resposta;
+        })
+        .then((usuario) => {
+            // Salva o estado e os dados reais do usuário na memória do navegador
+            localStorage.setItem('vm_logado', 'true');
+            localStorage.setItem('vm_usuario', JSON.stringify(usuario));
+
+            // Atualiza a interface gráfica do cabeçalho (troca o botão Entrar pelo Avatar)
+            aplicarEstadoLogin();
+
+            // Redireciona para o cardápio
+            carregarPagina('cardapio');
+        })
+        .catch((erro) => {
+            console.error('Erro no login:', erro);
+            alert(`Falha na autenticação: ${erro.message}`);
+        })
+        .finally(() => {
+            if (btnSubmit) {
+                btnSubmit.disabled = false;
+                btnSubmit.textContent = textoOriginal;
+            }
+        });
+
+        return;
+    };
 
     if (e.target.id === 'formCadastrarCliente') {
         e.preventDefault();
@@ -804,12 +1130,15 @@ document.addEventListener('submit', function(e) {
         if (!formValido) {
             console.warn('Envio cancelado: corrija os campos destacados em vermelho.');
             return;
-        }
+        };
 
         console.log('3. Validação aprovada! Coletando dados...');
 
         const form = e.target;
         const formData = new FormData(form);
+
+        // Verificando se o fluxo de edição foi ativado
+        const idEdicao = localStorage.getItem('vm_usuario_edicao');
 
         // 2. Monta o objeto exatamente com os campos do formulário
         const dadosCliente = {
@@ -826,37 +1155,69 @@ document.addEventListener('submit', function(e) {
             complemento: formData.get('complemento') || ''
         };
 
+        // Se estiver em edição, pegamos o ID para enviar junto do objeto acima pro C#
+        // que exige que o ID esteja presente pra fazer o PUT
+        if (idEdicao) {
+            dadosCliente.id = parseInt(idEdicao);
+        };
+
+        // Decidindo qual o método que será usado na requisição
+        const metodoRequisicao = idEdicao ? 'PUT' : 'POST';
+
+        // Definindo a URL que será usada na requisição
+        const urlRequisicao = idEdicao
+        ? `${API_URL}/Usuarios/${idEdicao}`
+        : `${API_URL}/Usuarios`;
+
+        const btnSubmit = form.querySelector('button[type="submit"]');
+        const textoOriginal = btnSubmit ? btnSubmit.textContent : '';
+        if (btnSubmit) { btnSubmit.disabled = true; btnSubmit.textContent = 'Enviando...'; }
+
         console.log('4. Enviando payload para a API:', dadosCliente);
 
         // 3. Dispara a requisição POST para o backend
-        fetch(`${API_URL}/Usuarios`, {
-            method: 'POST',
+        fetch(urlRequisicao, {
+            method: metodoRequisicao,
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(dadosCliente)
         })
         .then(async (res) => {
-            console.log('5. Status da resposta da API:', res.status);
-            const resposta = await res.json().catch(() => null);
 
             if (!res.ok) {
-                const msg = resposta?.mensagem || resposta?.title || 'Erro ao realizar o cadastro.';
-                throw new Error(msg);
+                const resposta = await res.json().catch(() => null);
+                throw new Error(resposta?.mensagem || 'Erro na operação.');
             }
 
-            return resposta;
+            // Não retornamos nada se o usuário tiver atualizado seu cadastro
+            return idEdicao ? null : res.json();
         })
         .then((dados) => {
-            console.log('6. Usuário salvo no banco com sucesso:', dados);
-            alert('Cadastro realizado com sucesso!');
-            form.reset();
-            carregarPagina('login');
+            if (idEdicao) {
+                console.log('Usuario atualizado com sucesso!');
+                Alert('Conta atualizada com sucesso!');
+                // Atualizando o localStorage do usuário com os dados novos e limpando a flag
+                localStorage.setItem('vm_usuario', JSON.stringify(dadosCliente));
+                localStorage.removeItem('vm_usuario_edicao');
+            } else {
+                console.log('Usuário salvo no banco com sucesso:', dados);
+                //alert('Cadastro realizado com sucesso!');
+                form.reset();
+                carregarPagina('login');
+            }
+            
         })
         .catch((erro) => {
-            console.error('7. Erro na requisição:', erro);
+            console.error('Erro na requisição:', erro);
             alert(`Falha no cadastro: ${erro.message}`);
-        });
+        })
+        .finally(() => {
+            if (btnSubmit) {
+                btnSubmit.disabled = false;
+                btnSubmit.textContent = textoOriginal;
+            };
+        })
 
         return;
     }
