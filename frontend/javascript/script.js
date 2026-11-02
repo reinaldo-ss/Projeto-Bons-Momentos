@@ -50,6 +50,8 @@ function carregarPagina(pagina) {
                 preencherFormularioEdicaoConta();
             } else if (pagina === 'finalCompra') {
                 carregarDadosFinalCompra();
+            } else if (pagina === 'historicoPedidoCliente') {
+                carregarHistoricoCliente()
             }
         });
 }
@@ -152,6 +154,80 @@ function aplicarEstadoLogin() {
         if (headerComPerfil) headerComPerfil.style.display = 'none';
         if (headerComBotaoEntrar) headerComBotaoEntrar.style.display = '';
     }
+}
+
+function carregarHistoricoCliente() {
+    const lista = document.getElementById('lista-pedidos-cliente');
+    const usuarioString = localStorage.getItem('vm_usuario');
+
+    if (!lista) return;
+
+    // Verificando se o usuário está logado e caso não o orientando a logar
+    if (!usuarioString) {
+        lista.innerHTML = '<p style="text-align: center;">Você precisa estar logado para ver seus pedidos.</p>';
+        return;
+    }
+
+    const usuario = JSON.parse(usuarioString);
+    const usuarioId = usuario.id || usuario.Id;
+
+    lista.innerHTML = '<p style="text-align: center;">Carregando seus pedidos...</p>';
+
+    // requisição ao endpoint de pedidos da API
+    fetch(`${API_URL}/Pedidos`)
+        .then(res => {
+            if (!res.ok) throw new Error('Falha ao buscar pedidos');
+            return res.json();
+        })
+        .then(pedidos => {
+            // Filtra os pedidos para mostrar apenas os do cliente logado
+            const meusPedidos = pedidos.filter(p => (p.idUsuario || p.IdUsuario) === usuarioId);
+
+            lista.innerHTML = '';
+
+            if (meusPedidos.length === 0) {
+                lista.innerHTML = '<p style="text-align: center;">Você ainda não possui pedidos em nosso histórico.</p>';
+                return;
+            }
+
+            // Inverte o array para mostrar os mais recentes primeiro
+            meusPedidos.reverse().forEach(pedido => {
+
+                // puxando os dados e os tratando para ficarem no formato desejado
+                const precoFormatado = (pedido.valorTotal || pedido.ValorTotal || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                const dataFormatada = new Date(pedido.dataPedido || pedido.DataPedido).toLocaleDateString('pt-BR');
+                const status = pedido.status || pedido.Status || 'Pendente';
+                const pagamento = pedido.opcaoPagamento || pedido.OpcaoPagamento || '-';
+                
+                // Define a classe CSS do status dinamicamente (pendente = amarelo, entregue = verde, etc)
+                const classeStatus = status.toLowerCase() === 'pendente' ? 'status-pendente' : 'status-entregue';
+                
+                const nomeReceita = pedido.receita?.nome || pedido.Receita?.Nome || `Pedido #${pedido.id || pedido.Id}`;
+                const fotoReceita = pedido.receita?.foto || pedido.Receita?.Foto || 'https://placehold.co/100x100?text=Bolo';
+
+                // Montando os cards que serão mostrados na página pro cliente
+                const divCard = document.createElement('div');
+                divCard.className = 'pedido-cliente-card';
+                divCard.innerHTML = `
+                    <img class="pedido-cliente-foto" src="${fotoReceita}" alt="${nomeReceita}">
+                    <div class="pedido-cliente-info">
+                        <p class="pedido-cliente-nome">${nomeReceita}</p>
+                        <p class="pedido-cliente-data">Pedido em ${dataFormatada}</p>
+                        <p class="pedido-cliente-pagamento">${pagamento}</p>
+                    </div>
+                    <div class="pedido-cliente-status">
+                        <span class="status-pill ${classeStatus}">${status}</span>
+                        <p class="pedido-cliente-preco">${precoFormatado}</p>
+                    </div>
+                `;
+                lista.appendChild(divCard);
+            });
+        })
+        .catch(erro => {
+            console.error('Erro no histórico:', erro);
+            lista.innerHTML = '<p style="text-align: center; color: red;">Erro ao carregar seu histórico.</p>';
+        });
+
 }
 
 function simularLogout() {
