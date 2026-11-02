@@ -57,15 +57,21 @@ public class PedidosController : ControllerBase
 
     // Rota PUT
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutPedido(int id, [FromBody] Pedido pedido)
+    public async Task<IActionResult> PutPedido(int id, [FromBody] Pedido pedidoAtualizado)
     {
-        if (id != pedido.Id)
+        if (id != pedidoAtualizado.Id)
         {
             return BadRequest("O ID passado na URL é diferente do ID do pedido enviado.");
         }
 
-        _context.Entry(pedido).State = EntityState.Modified;
+        // Verificando se o pedido existe no banco de dados
+        var pedidoExistente = await _context.Pedidos.FindAsync(id);
+        if (pedidoExistente == null)
+        {
+            return NotFound("Pedido não encontrado");
+        };
 
+        pedidoExistente.Status = pedidoAtualizado.Status;
         try
         {
             await _context.SaveChangesAsync();

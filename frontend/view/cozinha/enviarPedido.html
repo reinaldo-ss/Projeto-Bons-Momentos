@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Berkshire+Swash&display=swap" rel="stylesheet">
     
     <!--Importações-->
-    <script src="../../javascript/script.js" defer></script>
+    <!--<script src="../../javascript/script.js" defer></script>-->
     <link rel="stylesheet" href="../../css/styleGlobal.css">
     <link rel="stylesheet" href="../../css/enviarPedido.css">
 
@@ -51,34 +51,33 @@
                 <div class="ep-info-pedido">
                     <div class="ep-info-item">
                         <span class="ep-info-rotulo">Número do pedido</span>
-                        <span class="ep-info-valor">#1024</span>
+                        <span class="ep-info-valor" id="ep-val-pedido">Carregando...</span>
                     </div>
-
                     <div class="ep-info-item">
                         <span class="ep-info-rotulo">Opção de pagamento</span>
-                        <span class="ep-info-valor">PIX</span>
+                        <span class="ep-info-valor" id="ep-val-pagamento">Carregando...</span>
                     </div>
-
                     <div class="ep-info-item">
                         <span class="ep-info-rotulo">Nome do cliente</span>
-                        <span class="ep-info-valor">Maria Oliveira</span>
+                        <span class="ep-info-valor" id="ep-val-cliente">Carregando...</span>
                     </div>
-                    
                     <div class="ep-info-item">
                         <span class="ep-info-rotulo">Telefone</span>
-                        <span class="ep-info-valor">(11) 98888-1234</span>
+                        <span class="ep-info-valor" id="ep-val-telefone">Carregando...</span>
                     </div>
-                    
                     <div class="ep-info-item">
                         <span class="ep-info-rotulo">CEP</span>
-                        <span class="ep-info-valor">01001-000</span>
+                        <span class="ep-info-valor" id="ep-val-cep">Carregando...</span>
                     </div>
-
                     <div class="ep-info-item ep-info-endereco">
                         <span class="ep-info-rotulo">Endereço e Número</span>
-                        <span class="ep-info-valor">Rua Santos Domingos, 219</span>
+                        <span class="ep-info-valor" id="ep-val-endereco">Carregando...</span>
                     </div>
+                </div>
 
+                <div class="ep-acoes">
+                    <a href="cozinha.html" class="ep-btn-voltar" onclick="event.preventDefault(); carregarPagina('cozinha')">Voltar</a>
+                    <button type="button" class="ep-btn-enviar" onclick="despacharPedido()">Enviar</button>
                 </div>
 
                 <div class="ep-secao-motoboy">
@@ -96,7 +95,7 @@
 
                 <div class="ep-acoes">
                     <a href="cozinha.html" class="ep-btn-voltar">Voltar</a>
-                    <button type="button" class="ep-btn-enviar">Enviar</button>
+                    <button type="button" class="ep-btn-enviar" onclick="despacharPedido()">Enviar</button>
                 </div>
 
             </div>

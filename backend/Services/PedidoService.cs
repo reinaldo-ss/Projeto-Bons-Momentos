@@ -22,7 +22,7 @@ namespace ConfeitariaApi.Services
 
             // Regra 2: Só pode ser efetuado 1 pedido por vez (Verifica se já tem um pendente)
             var temPedidoPendente = await _context.Pedidos
-                .AnyAsync(p => p.IdUsuario == pedido.IdUsuario && p.Status == "Pendente");
+                .AnyAsync(p => p.IdUsuario == pedido.IdUsuario && p.Status == "Em Preparo");
             
             if (temPedidoPendente)
             {

@@ -51,8 +51,14 @@ function carregarPagina(pagina) {
             } else if (pagina === 'finalCompra') {
                 carregarDadosFinalCompra();
             } else if (pagina === 'historicoPedidoCliente') {
-                carregarHistoricoCliente()
-            }
+                carregarHistoricoCliente();
+            } else if (pagina === 'historicoPedidoCliente') {
+                carregarHistoricoCliente();
+            } else if (pagina === 'cozinha') {
+                carregarPainelCozinha();
+            } else if (pagina === 'enviarPedido') {
+                carregarEnviarPedido();
+            };
         });
 }
 
@@ -155,6 +161,188 @@ function aplicarEstadoLogin() {
         if (headerComBotaoEntrar) headerComBotaoEntrar.style.display = '';
     }
 }
+
+function carregarPainelCozinha() {
+    // Atribuindo os IDs de cada coluna as variáveis
+    const colFazer = document.getElementById('cz-coluna-fazer');
+    const colFazendo = document.getElementById('cz-coluna-fazendo');
+    const colEntrega = document.getElementById('cz-coluna-entrega');
+
+    // Trava de segurança
+    if (!colFazer || !colFazendo || !colEntrega) return;
+
+    // Texto de carregamento
+    colFazer.innerHTML = '<p style="text-align:center;">Buscando...</p>';
+    colFazendo.innerHTML = '<p style="text-align:center;">Buscando...</p>';
+    colEntrega.innerHTML = '<p style="text-align:center;">Buscando...</p>';
+
+    // Fazendo a requisição ao endpoint de pedidos da API
+    fetch(`${API_URL}/Pedidos`)
+        .then(res => res.json())
+        .then(pedidos => {
+            pedidosCozinhaMemoria = pedidos; 
+            
+            colFazer.innerHTML = '';
+            colFazendo.innerHTML = '';
+            colEntrega.innerHTML = '';
+
+            // Filtra pedidos que devem aparecer na cozinha
+            const pedidosAtivos = pedidos.filter(p => {
+                const st = (p.status || p.Status).toLowerCase();
+                return st !== 'entregue' && st !== 'cancelado';
+            });
+
+            pedidosAtivos.forEach(pedido => {
+                const id = pedido.id || pedido.Id;
+                const status = (pedido.status || pedido.Status).toLowerCase();
+                const obs = pedido.observacao || pedido.Observacao || '-';
+                const pag = pedido.opcaoPagamento || pedido.OpcaoPagamento || '-';
+                const nomeReceita = pedido.receita?.nome || pedido.Receita?.Nome || `Receita #${pedido.idReceita || pedido.IdReceita}`;
+
+                const divCard = document.createElement('div');
+                divCard.className = 'cz-card-pedido';
+                
+                let htmlBotoes = '';
+
+                // Define os botões com base na coluna (status)
+                if (status === 'pendente') {
+                    htmlBotoes = `
+                        <button class="cz-btn-cancelar" onclick="atualizarStatusCozinha(${id}, 'Cancelado')">Cancelar</button>
+                        <button class="cz-btn-aceitar" onclick="atualizarStatusCozinha(${id}, 'Em Preparo')">Aceitar</button>
+                    `;
+                } else if (status === 'em preparo') {
+                    htmlBotoes = `
+                        <button class="cz-btn-concluir" onclick="atualizarStatusCozinha(${id}, 'Pronto')">Concluir</button>
+                    `;
+                } else if (status === 'pronto') {
+                    htmlBotoes = `
+                        <button class="cz-btn-motoboy" onclick="prepararDespacho(${id})">Escolher motoboy</button>
+                    `;
+                }
+
+                divCard.innerHTML = `
+                    <p class="cz-card-titulo">Pedido #${id} — ${nomeReceita}</p>
+                    <p class="cz-card-info"><strong>Observação:</strong> ${obs}</p>
+                    <p class="cz-card-info"><strong>Pagamento:</strong> ${pag}</p>
+                    <div class="cz-card-acoes">${htmlBotoes}</div>
+                `;
+
+                // Distribui nas colunas do Kanban
+                if (status === 'pendente') colFazer.appendChild(divCard);
+                else if (status === 'em preparo') colFazendo.appendChild(divCard);
+                else if (status === 'pronto') colEntrega.appendChild(divCard);
+            });
+        })
+        .catch(erro => console.error('Erro ao carregar Kanban:', erro));
+};
+
+function atualizarStatusCozinha(id, novoStatus) {
+    // Resgata o pedido completo da memória
+    // const pedido = pedidosCozinhaMemoria.find(p => (p.id || p.Id) === id);
+    // if (!pedido) return;
+
+    // Montando o objeto apenas com os dados que precisamos
+    const payload = {
+        id: id,
+        status: novoStatus
+    };
+    
+    // Atualiza a string do status lidando com PascalCase ou camelCase
+    if (payload.status !== undefined) payload.status = novoStatus;
+    if (payload.Status !== undefined) payload.Status = novoStatus;
+
+    // Remove os objetos aninhados para o C# não tentar recriá-los no banco e dar conflito
+    delete payload.receita; delete payload.Receita;
+    delete payload.usuario; delete payload.Usuario;
+
+    fetch(`${API_URL}/pedidos/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    })
+    .then(async (res) => {
+        if (!res.ok) {
+            const err = await res.json().catch(() => null);
+            throw new Error(err?.mensagem || 'Falha ao atualizar o C#');
+        };
+
+        carregarPainelCozinha(); // Recarrega os cards automaticamente nas colunas certas
+    })
+    .catch(erro => alert(`Erro: ${erro.message}`));
+};
+
+function prepararDespacho(id) {
+    // Salva qual pedido a cozinha quer enviar e joga para a tela do Motoboy
+    localStorage.setItem('vm_pedido_despacho', id);
+    carregarPagina('enviarPedido');
+};
+
+function carregarEnviarPedido() {
+    const pedidoId = localStorage.getItem('vm_pedido_despacho');
+
+    if (!pedidoId) return carregarPagina('cozinha');
+
+    // Resgata o pedido que já estava na memória do Kanban
+    const pedido = pedidosCozinhaMemoria.find(p => (p.id || p.Id) == pedidoId);
+    if (!pedido) return;
+
+    // Preenche dados básicos
+    document.getElementById('ep-val-pedido').textContent = `#${pedido.id || pedido.Id}`;
+    document.getElementById('ep-val-pagamento').textContent = pedido.opcaoPagamento || pedido.OpcaoPagamento;
+    document.getElementById('ep-val-endereco').textContent = pedido.enderecoEntrega || pedido.EnderecoEntrega;
+
+    // Busca o cliente pelo ID para exibir nome, telefone e CEP
+    const idUsuario = pedido.idUsuario || pedido.IdUsuario;
+    fetch(`${API_URL}/Usuarios/${idUsuario}`)
+        .then(res => res.json())
+        .then(usuario => {
+            document.getElementById('ep-val-cliente').textContent = usuario.nome || usuario.Nome;
+            document.getElementById('ep-val-telefone').textContent = usuario.telefone || usuario.Telefone;
+            document.getElementById('ep-val-cep').textContent = usuario.cep || usuario.Cep;
+        }).catch(() => console.warn('Falha ao carregar dados do cliente'));
+
+    // Busca motoboys e preenche o dropdown
+    const selectMotoboy = document.getElementById('ep-select-motoboy');
+    selectMotoboy.innerHTML = '<option value="">Carregando motoboys...</option>';
+    
+    fetch(`${API_URL}/Motoboys`)
+        .then(res => res.json())
+        .then(motoboys => {
+            selectMotoboy.innerHTML = '<option value="">Selecione um motoboy</option>';
+            motoboys.forEach(m => {
+                selectMotoboy.innerHTML += `<option value="${m.id || m.Id}">${m.nome || m.Nome} - ${m.telefone || m.Telefone}</option>`;
+            });
+        }).catch(() => selectMotoboy.innerHTML = '<option value="">Erro ao buscar motoboys</option>');
+};
+
+function despacharPedido() {
+    const pedidoId = localStorage.getItem('vm_pedido_despacho');
+    const idMotoboy = document.getElementById('ep-select-motoboy').value;
+
+    if (!idMotoboy) {
+        alert("Selecione um motoboy antes de enviar!");
+        return;
+    }
+
+    // Avança o status. Como combinamos, não mexemos mais depois daqui pelo front
+    const payload = {
+        id: parseInt(pedidoId),
+        status: 'Saiu para entrega'
+    };
+
+    fetch(`${API_URL}/Pedidos/${pedidoId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    })
+    .then(async (res) => {
+        if (!res.ok) throw new Error('Falha ao despachar pedido');
+        alert('Pedido enviado para entrega com sucesso!');
+        localStorage.removeItem('vm_pedido_despacho');
+        carregarPagina('cozinha'); // Retorna ao Kanban
+    })
+    .catch(erro => alert(`Erro: ${erro.message}`));
+};
 
 function carregarHistoricoCliente() {
     const lista = document.getElementById('lista-pedidos-cliente');
@@ -1178,8 +1366,18 @@ document.addEventListener('submit', function(e) {
             // Atualiza a interface gráfica do cabeçalho (troca o botão Entrar pelo Avatar)
             aplicarEstadoLogin();
 
-            // Redireciona para o cardápio
-            carregarPagina('cardapio');
+            const emailLogado = usuario.email || usuario.Email;
+
+            // redirecionando para a cozinha ou para a página de admin, dependendo do email inserido
+            if (emailLogado === 'cozinha@cozinha.com') {
+                carregarPagina('cozinha');
+            } else if (emailLogado === 'admin@admin.com') {
+                carregarPagina('admin');
+            } else {
+                // Redireciona para o cardápio
+                carregarPagina('cardapio');
+            };
+           
         })
         .catch((erro) => {
             console.error('Erro no login:', erro);
