@@ -58,6 +58,12 @@ function carregarPagina(pagina) {
                 carregarPainelCozinha();
             } else if (pagina === 'enviarPedido') {
                 carregarEnviarPedido();
+            } else if (pagina === 'admin') {
+                carregarPainelAdmin();
+            } else if (pagina === 'motoboys') {
+                carregarPainelMotoboys();
+            } else if (pagina === 'historicoPedidos') {
+                carregarPainelHistorico();
             };
         });
 }
@@ -997,7 +1003,171 @@ function validarFormCadCliente() {
         if (msg) valido = false;
     });
     return valido;
-}
+};
+
+function carregarPainelHistorico() {
+    const tbody = document.getElementById('corpo-tabela-pedidos');
+    if (!tbody) return;
+
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Buscando histórico de pedidos...</td></tr>';
+
+    fetch(`${API_URL}/Pedidos`)
+        .then(res => res.json())
+        .then(pedidos => {
+            tbody.innerHTML = '';
+
+            if (pedidos.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Nenhum pedido encontrado.</td></tr>';
+                return;
+            }
+
+            // Inverte para exibir os mais recentes no topo
+            pedidos.reverse().forEach(pedido => {
+                // Tenta pegar o nome do objeto aninhado. Se o Entity Framework não trouxer o Include, usa o ID
+                const nomeCliente = pedido.usuario?.nome || pedido.Usuario?.Nome || `Cliente #${pedido.idUsuario || pedido.IdUsuario}`;
+                const nomeReceita = pedido.receita?.nome || pedido.Receita?.Nome || `Receita #${pedido.idReceita || pedido.IdReceita}`;
+                const observacao = pedido.observacao || pedido.Observacao || '-';
+                const pagamento = pedido.opcaoPagamento || pedido.OpcaoPagamento || '-';
+                const status = pedido.status || pedido.Status || 'Pendente';
+                const dataFormatada = new Date(pedido.dataPedido || pedido.DataPedido).toLocaleDateString('pt-BR');
+
+                let classeStatus = 'status-pendente';
+                if (status.toLowerCase() === 'entregue') classeStatus = 'status-entregue';
+                else if (status.toLowerCase() === 'saiu para entrega' || status.toLowerCase() === 'pronto') classeStatus = 'status-entregue'; // reaproveitando a cor verde/azul
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="tabela-texto-truncado" title="${nomeCliente}">${nomeCliente}</td>
+                    <td class="tabela-texto-truncado" title="${nomeReceita}">${nomeReceita}</td>
+                    <td class="tabela-texto-truncado" title="${observacao}">${observacao}</td>
+                    <td>${pagamento}</td>
+                    <td><span class="status-pill ${classeStatus}">${status}</span></td>
+                    <td>${dataFormatada}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        })
+        .catch(erro => {
+            console.error('Erro ao carregar histórico:', erro);
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: red;">Erro ao buscar dados.</td></tr>';
+        });
+};
+
+function carregarPainelAdmin() {
+    const tbody = document.getElementById('corpo-tabela-admin');
+    
+    if (!tbody) return;
+
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Buscando receitas...</td></tr>';
+
+    fetch(`${API_URL}/Receitas`)
+        .then(res => res.json())
+        .then(receitas => {
+            tbody.innerHTML = '';
+
+            if (receitas.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Nenhuma receita cadastrada.</td></tr>';
+                return;
+            }
+
+            receitas.forEach(receita => {
+                const id = receita.id || receita.Id;
+                const precoFormatado = (receita.preco || receita.Preco || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                const foto = receita.foto || receita.Foto || 'https://placehold.co/80x50?text=Sem+Foto';
+                const nome = receita.nome || receita.Nome;
+                const desc = receita.descricao || receita.Descricao;
+                const ingr = receita.ingredientes || receita.Ingredientes;
+
+                const tr = document.createElement('tr');
+                tr.className = 'linha-receita-admin'; // Classe adicionada para facilitar o filtro
+                tr.innerHTML = `
+                    <td><img src="${foto}" class="tabela-img" alt="${nome}"></td>
+                    <td class="nome-receita">${nome}</td>
+                    <td class="tabela-texto-truncado desc-receita" title="${desc}">${desc}</td>
+                    <td class="tabela-texto-truncado" title="${ingr}">${ingr}</td>
+                    <td>${precoFormatado}</td>
+                    <td class="col-acoes">
+                        <button class="btn-deletar" onclick="deletarReceita(${id})">Deletar</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        })
+        .catch(erro => {
+            console.error('Erro ao carregar admin:', erro);
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: red;">Erro ao buscar dados.</td></tr>';
+        });
+};
+
+function deletarReceita(id) {
+    if (!confirm("Tem certeza que deseja deletar esta receita do cardápio?")) return;
+
+    fetch(`${API_URL}/Receitas/${id}`, {
+        method: 'DELETE'
+        })
+        .then(res => {
+            if (!res.ok) throw new Error('Falha ao deletar no C#');
+            alert('Receita deletada com sucesso!');
+            carregarPainelAdmin(); // Recarrega a tabela atualizada
+        })
+        .catch(erro => alert(`Erro: ${erro.message}`));
+};
+
+function carregarPainelMotoboys() {
+    const tbody = document.getElementById('corpo-tabela-motoboys');
+    if (!tbody) return;
+
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Buscando motoboys...</td></tr>';
+
+    fetch(`${API_URL}/Motoboys`)
+        .then(res => res.json())
+        .then(motoboys => {
+            tbody.innerHTML = '';
+
+            if (motoboys.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Nenhum motoboy cadastrado.</td></tr>';
+                return;
+            }
+
+            motoboys.forEach(motoboy => {
+                const id = motoboy.id || motoboy.Id;
+                const nome = motoboy.nome || motoboy.Nome;
+                const cpf = motoboy.cpf || motoboy.Cpf;
+                const telefone = motoboy.telefone || motoboy.Telefone;
+                const cnh = motoboy.cnh || motoboy.Cnh;
+                const placa = motoboy.placa || motoboy.Placa;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${nome}</td>
+                    <td>${cpf}</td>
+                    <td>${telefone}</td>
+                    <td>${cnh}</td>
+                    <td>${placa}</td>
+                    <td class="col-acoes">
+                        <button class="btn-deletar" onclick="deletarMotoboy(${id})">Deletar</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        })
+        .catch(erro => {
+            console.error('Erro ao carregar motoboys:', erro);
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: red;">Erro ao buscar dados.</td></tr>';
+        });
+};
+
+function deletarMotoboy(id) {
+    if (!confirm("Tem certeza que deseja deletar este motoboy?")) return;
+
+    fetch(`${API_URL}/Motoboys/${id}`, { method: 'DELETE' })
+        .then(res => {
+            if (!res.ok) throw new Error('Falha ao deletar no C#');
+            alert('Motoboy deletado com sucesso!');
+            carregarPainelMotoboys();
+        })
+        .catch(erro => alert(`Erro: ${erro.message}`));
+};
 
 // Valida campo ao sair dele (focusout borbulha, blur não)
 document.addEventListener('focusout', function(e) {
@@ -1016,6 +1186,32 @@ document.addEventListener('focusout', function(e) {
     };
     const id = e.target?.id;
     if (mapa[id]) _mostrarErroCad(id, mapa[id](e.target.value));
+});
+
+// ---------------------------------------------------------
+// FILTRO DA BARRA DE PESQUISA (Escopo Global)
+// ---------------------------------------------------------
+document.addEventListener('input', function(e) {
+    if (e.target && e.target.id === 'input-buscar-receita') {
+        const termo = e.target.value.toLowerCase();
+        const linhas = document.querySelectorAll('.linha-receita-admin');
+
+        linhas.forEach(linha => {
+            const tdNome = linha.querySelector('.nome-receita');
+            const tdDesc = linha.querySelector('.desc-receita');
+            
+            if (!tdNome || !tdDesc) return;
+            
+            const nome = tdNome.textContent.toLowerCase();
+            const desc = tdDesc.textContent.toLowerCase();
+            
+            if (nome.includes(termo) || desc.includes(termo)) {
+                linha.style.display = '';
+            } else {
+                linha.style.display = 'none';
+            };
+        });
+    };
 });
 
 // Filtra caracteres inválidos durante a digitação
