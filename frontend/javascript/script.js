@@ -333,7 +333,8 @@ function despacharPedido() {
     // Avança o status. Como combinamos, não mexemos mais depois daqui pelo front
     const payload = {
         id: parseInt(pedidoId),
-        status: 'Saiu para entrega'
+        status: 'Saiu para entrega',
+        idMotoboy: parseInt(idMotoboy)
     };
 
     fetch(`${API_URL}/Pedidos/${pedidoId}`, {
@@ -1706,5 +1707,63 @@ window.addEventListener('unload', function() {
     }
 })
 
+document.addEventListener('input', function(e) {
+    if (e.target && e.target.id === 'input-pesquisar-vitrine') {
+        const termo = e.target.value.toLowerCase();
+        const cards = document.querySelectorAll('.card-receita');
+        let cardsVisiveis = 0;
+
+        cards.forEach(card => {
+            const nomeEl = card.querySelector('h3');
+            const ingrEl = card.querySelector('.card-ingredientes');
+            
+            if (!nomeEl || !ingrEl) return;
+            
+            const nome = nomeEl.textContent.toLowerCase();
+            const ingredientes = ingrEl.textContent.toLowerCase();
+            
+            if (nome.includes(termo) || ingredientes.includes(termo)) {
+                card.style.display = '';
+                cardsVisiveis++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Modifica os elementos existentes no HTML
+        const tituloMostruario = document.querySelector('.titulo-mostruario');
+        const contadorReceitas = document.getElementById('contador-receitas');
+
+        if (tituloMostruario) {
+            if (cardsVisiveis === 0 && cards.length > 0) {
+                tituloMostruario.textContent = 'Nenhuma receita corresponde à sua pesquisa.';
+                if (contadorReceitas) contadorReceitas.style.display = 'none';
+            } else {
+                tituloMostruario.textContent = 'Receitas Disponíveis';
+                if (contadorReceitas) {
+                    contadorReceitas.style.display = '';
+                    contadorReceitas.textContent = `${cardsVisiveis} receita(s) encontrada(s)`;
+                }
+            }
+        }
+    }
+});
+
 aplicarEstadoLogin();
-carregarPagina('cardapio');
+
+const usuarioStringStartup = localStorage.getItem('vm_usuario');
+
+if (usuarioStringStartup) {
+    const usuarioStartup = JSON.parse(usuarioStringStartup);
+    const emailStartup = usuarioStartup.email || usuarioStartup.Email;
+    
+    if (emailStartup === 'cozinha@cozinha.com') {
+        carregarPagina('cozinha');
+    } else if (emailStartup === 'admin@admin.com') {
+        carregarPagina('admin');
+    } else {
+        carregarPagina('cardapio');
+    }
+} else {
+    carregarPagina('cardapio');
+}

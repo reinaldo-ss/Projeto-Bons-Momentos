@@ -72,6 +72,8 @@ public class PedidosController : ControllerBase
         };
 
         pedidoExistente.Status = pedidoAtualizado.Status;
+
+        pedidoExistente.IdMotoboy = pedidoAtualizado.IdMotoboy;
         try
         {
             await _context.SaveChangesAsync();

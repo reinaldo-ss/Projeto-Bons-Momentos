@@ -13,6 +13,9 @@ public class Pedido
 
     [Column("id_receita")]
     public int IdReceita { get; set; }
+    
+    [Column("id_motoboy")]
+    public int? IdMotoboy { get; set; }
 
     [Column("observacao")]
     public string? Observacao { get; set; }
