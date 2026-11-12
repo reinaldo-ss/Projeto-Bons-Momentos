@@ -20,7 +20,7 @@
     <section id="secao-header-enviar-pedido" class="cor_fundo">
         <header class="ep-cabecalho content-section">
             <div class="ep-orientacao-logo">
-                <img src="../../img/logo_marrom.png" onerror="this.onerror=null; this.src='../../img/logo_marrom.png';" class="logo" alt="Logo Bons Momentos">
+                <img src="./img/logo_marrom.png" onerror="this.onerror=null; this.src='./img/logo_marrom.png';" class="logo" alt="Logo Bons Momentos">
                 <div>
                     <h3 class="berkshire-swash-regular">Bons Momentos</h3>
                     <p>Painel da Cozinha</p>
@@ -75,11 +75,6 @@
                     </div>
                 </div>
 
-                <div class="ep-acoes">
-                    <a href="cozinha.html" class="ep-btn-voltar" onclick="event.preventDefault(); carregarPagina('cozinha')">Voltar</a>
-                    <button type="button" class="ep-btn-enviar" onclick="despacharPedido()">Enviar</button>
-                </div>
-
                 <div class="ep-secao-motoboy">
                     <label class="ep-motoboy-rotulo" for="ep-select-motoboy">Motoboys disponíveis:</label>
 
@@ -93,11 +88,15 @@
                     </div>
                 </div>
 
-                <div class="ep-acoes">
+                <!--<div class="ep-acoes">
                     <a href="cozinha.html" class="ep-btn-voltar">Voltar</a>
                     <button type="button" class="ep-btn-enviar" onclick="despacharPedido()">Enviar</button>
                 </div>
-
+            -->
+                <div class="ep-acoes">
+                    <a href="cozinha.html" class="ep-btn-voltar" onclick="event.preventDefault(); carregarPagina('cozinha')">Voltar</a>
+                    <button type="button" class="ep-btn-enviar" onclick="despacharPedido()">Enviar</button>
+                </div>
             </div>
         </div>
     </section>
