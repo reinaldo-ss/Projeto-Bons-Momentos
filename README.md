@@ -45,4 +45,4 @@ Este projeto foi desenvolvido como parte dos requisitos acadêmicos (Projeto Int
 
 1. Clone este repositório:
    ```bash
-   git clone https://github.com/reinaldo-ss/Projeto-PIM-BIM2-2026.git
+   git clone [https://github.com/reinaldo-ss/Projeto-PIM-BIM2-2026.git](https://github.com/reinaldo-ss/Projeto-PIM-BIM2-2026.git)

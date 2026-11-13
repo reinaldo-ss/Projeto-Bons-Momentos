@@ -212,21 +212,6 @@
     color: white;
 }
 
-.btn-relatorio {
-    background-color: var(--bm-terracota);
-    color: white;
-    border: none;
-    padding: 11px 20px;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.25s ease;
-}
-
-.btn-relatorio:hover {
-    background-color: var(--bm-terracota-escuro);
-}
-
 /* ===== Tabela ===== */
 .admin-tabela-wrapper {
     background-color: white;

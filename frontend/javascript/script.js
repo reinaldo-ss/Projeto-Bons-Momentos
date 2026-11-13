@@ -56,6 +56,8 @@ function carregarPagina(pagina) {
                 carregarHistoricoCliente();
             } else if (pagina === 'cozinha') {
                 carregarPainelCozinha();
+            } else if (pagina === 'historicoPedidosCozinha') {
+                carregarPainelHistorico();
             } else if (pagina === 'enviarPedido') {
                 carregarEnviarPedido();
             } else if (pagina === 'admin') {
@@ -94,52 +96,6 @@ function inicializarCarrossel() {
     if (window._carrosselTimer) clearInterval(window._carrosselTimer);
     window._carrosselTimer = setInterval(() => window.moverCarrossel(1), 5000);
 }
-
-/* AQUI */
-
-/* ===== Painel Cozinha ===== */
-
-// Monta o caminho do partial considerando se a página já foi aberta diretamente
-// de dentro de view/cozinha/ (teste isolado) ou carregada via SPA a partir da raiz (index.html)
-/*function cz_caminhoView(arquivo) {
-    const estaDentroDeView = window.location.pathname.includes('/view/');
-    return estaDentroDeView ? `${arquivo}.html` : `view/cozinha/${arquivo}.html`;
-}
-
-const CZ_TITULOS_SECOES = {
-    pedidos: { titulo: 'Pedidos', subtitulo: 'Gerencie os pedidos em andamento na cozinha' },
-    historico: { titulo: 'Histórico de Pedidos', subtitulo: 'Acompanhe todos os pedidos já finalizados pela cozinha' }
-};
-
-// Troca o conteúdo principal da cozinha (Pedidos / Histórico) via fetch, sem recarregar a página
-function cz_selecionarSecao(secao, elClicado) {
-    const area = document.getElementById('cz-area-principal');
-    if (!area) return;
-
-    document.querySelectorAll('.cz-menu-item').forEach(item => item.classList.remove('ativo'));
-    const itemAtivo = elClicado || document.querySelector(`.cz-menu-item[data-secao="${secao}"]`);
-    if (itemAtivo) itemAtivo.classList.add('ativo');
-
-    const info = CZ_TITULOS_SECOES[secao] || CZ_TITULOS_SECOES.pedidos;
-    const tituloEl = document.getElementById('cz-titulo-secao');
-    const subtituloEl = document.getElementById('cz-subtitulo-secao');
-    if (tituloEl) tituloEl.textContent = info.titulo;
-    if (subtituloEl) subtituloEl.textContent = info.subtitulo;
-
-    const arquivo = secao === 'historico' ? 'historicoPedidosCozinha' : 'pedidosCozinha';
-
-    fetch(cz_caminhoView(arquivo))
-        .then(res => res.text())
-        .then(html => {
-            area.innerHTML = html;
-        })
-        .catch(erro => {
-            console.error('Erro ao carregar seção da cozinha:', erro);
-            area.innerHTML = '<p>Erro ao carregar conteúdo.</p>';
-        });
-}
-*/
-/* ACABA AQUI */
 
 /* ===== Simulação de login (estado local, sem API) ===== */
 function aplicarEstadoLogin() {
@@ -537,6 +493,41 @@ function prepararEdicaoConta() {
     }
 }
 
+function excluirContaCliente() {
+    const usuarioString = localStorage.getItem('vm_usuario');
+    if (!usuarioString) return;
+
+    const usuarioLogado = JSON.parse(usuarioString);
+    const idUsuario = usuarioLogado.id || usuarioLogado.Id;
+    const senhaAtual = usuarioLogado.senha || usuarioLogado.Senha;
+
+    // Pede confirmação e senha por segurança (mesmo padrão do prepararEdicaoConta)
+    const confirmar = confirm("Tem certeza que deseja excluir permanentemente a sua conta?");
+    if (!confirmar) return;
+
+    const senhaDigitada = prompt("Digite sua SENHA para confirmar a exclusão da conta:");
+    if (senhaDigitada !== senhaAtual) {
+        alert("Senha incorreta. A conta não foi excluída.");
+        return;
+    }
+
+    fetch(`${API_URL}/Usuarios/${idUsuario}`, {
+        method: 'DELETE'
+    })
+    .then(async (res) => {
+        if (!res.ok) {
+            const err = await res.json().catch(() => null);
+            throw new Error(err?.mensagem || 'Não foi possível excluir a conta (verifique se há pedidos vinculados a este usuário).');
+        }
+        alert("Sua conta foi excluída com sucesso.");
+        simularLogout(); // Limpa o localStorage, atualiza o header e volta para o cardápio
+    })
+    .catch(erro => {
+        console.error('Erro ao excluir conta:', erro);
+        alert(`Erro: ${erro.message}`);
+    });
+}
+
 function preencherFormularioEdicaoConta() {
     const idEdicao = localStorage.getItem('vm_usuario_edicao');
     if (!idEdicao) return;
@@ -906,10 +897,11 @@ function selecionarReceita(id, nome, preco, foto) {
 };
 
 /* ===== Carregamento da Tela de Finalizar Compra ===== */
+/* ===== Carregamento da Tela de Finalizar Compra ===== */
 function carregarDadosFinalCompra() {
-    // Localizando e guardando os arquivos que guardam os dados do pedido atual
     const pedidoString = localStorage.getItem('vm_pedido_atual');
     const usuarioString = localStorage.getItem('vm_usuario');
+    const logado = localStorage.getItem('vm_logado') === 'true';
 
     // Se não há pedido armazenado em localStorage
     if (!pedidoString) {
@@ -918,38 +910,34 @@ function carregarDadosFinalCompra() {
         return;
     }
 
-    // Se não há nenhum usuário logado no momento da compra
-    // if (!usuarioString) {
-    //     alert("Você precisa estar logado para finalizar um pedido.");
-    //     carregarPagina('cadastrarCliente'); // Rota de login/cadastro
-    //     return;
-    // }
-
-    // Transformando os valores adquiridos em objetos 
     const pedido = JSON.parse(pedidoString);
-    const usuario = JSON.parse(usuarioString);
 
-    // 1. Preenche os dados da receita
+    // 1. Preenche os dados da receita (funciona logado ou deslogado)
     const precoFormatado = pedido.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     
     const imgEl = document.getElementById('compra-foto');
-    if (imgEl) imgEl.src = pedido.foto; // Puxa a string Base64 do localStorage
+    if (imgEl) imgEl.src = pedido.foto;
     
     document.getElementById('compra-nome').textContent = pedido.nome;
     document.getElementById('compra-preco').textContent = precoFormatado;
     document.getElementById('compra-resumo-preco').textContent = precoFormatado;
     document.getElementById('compra-total').textContent = precoFormatado;
 
-    // 2. Preenche o endereço do cliente
-    const rua = usuario.endereco || usuario.Endereco || 'Endereço não informado';
-    const num = usuario.numero || usuario.Numero || 'S/N';
-    const bairro = usuario.bairro || usuario.Bairro || '';
-    const cidade = usuario.cidade || usuario.Cidade || '';
-    const cep = usuario.cep || usuario.Cep || '';
-    
-    const enderecoCompleto = `${rua}, ${num} - ${bairro}, ${cidade} - CEP ${cep}`;
-    document.getElementById('compra-endereco-texto').textContent = enderecoCompleto;
-};
+    // 2. Preenche o endereço apenas se o cliente estiver logado
+    const enderecoEl = document.getElementById('compra-endereco-texto');
+    if (logado && usuarioString) {
+        const usuario = JSON.parse(usuarioString);
+        const rua = usuario.endereco || usuario.Endereco || 'Endereço não informado';
+        const num = usuario.numero || usuario.Numero || 'S/N';
+        const bairro = usuario.bairro || usuario.Bairro || '';
+        const cidade = usuario.cidade || usuario.Cidade || '';
+        const cep = usuario.cep || usuario.Cep || '';
+        
+        enderecoEl.textContent = `${rua}, ${num} - ${bairro}, ${cidade} - CEP ${cep}`;
+    } else if (enderecoEl) {
+        enderecoEl.textContent = 'Faça login para carregar seu endereço de entrega';
+    }
+}
 
 // Valida campo ao sair dele (focusout borbulha, blur não)
 document.addEventListener('focusout', function(e) {
@@ -1238,6 +1226,39 @@ document.addEventListener('input', function(e) {
    Edit: Eu mesmo, Henrique na área bb, e os dados são enviados
    daq msm
    ===================================================== */
+
+function comprimirImagemBase64(file, maxWidth = 600, quality = 0.7) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+            const img = new Image();
+            img.src = event.target.result;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+
+                if (width > maxWidth) {
+                    height = Math.round((height * maxWidth) / width);
+                    width = maxWidth;
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                // Converte para JPEG comprimido (fica muito mais leve no banco)
+                resolve(canvas.toDataURL('image/jpeg', quality));
+            };
+            img.onerror = (err) => reject(err);
+        };
+        reader.onerror = (err) => reject(err);
+    });
+}
+
+
 document.addEventListener('submit', function(e) {
     // log de teste
     console.log(`Evento de submit recebido. Nome do elemento que disparou: ${e.target.id}`);
@@ -1274,7 +1295,51 @@ document.addEventListener('submit', function(e) {
         }
 
         // Instanciando um conversor para Base64
-        const reader = new FileReader();
+        if (arquivoFoto) {
+            comprimirImagemBase64(arquivoFoto)
+                .then((base64String) => {
+                    const dadosReceita = {
+                        nome: formData.get('nome'),
+                        descricao: formData.get('descricao'),
+                        ingredientes: formData.get('ingredientes'),
+                        preco: parseFloat(formData.get('preco')) || 0,
+                        foto: base64String
+                    };
+
+                    return fetch(`${API_URL}/Receitas`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(dadosReceita)
+                    });
+                })
+                .then(async (res) => {
+                    const resposta = await res.json().catch(() => null);
+                    if (!res.ok) {
+                        const mensagemErro = resposta?.mensagem || resposta?.title || 'Erro ao cadastrar a receita';
+                        throw new Error(mensagemErro);
+                    }
+                    return resposta;
+                })
+                .then(() => {
+                    alert('Receita cadastrada com sucesso!');
+                    form.reset();
+                    const preview = document.getElementById('preview-foto');
+                    const placeholder = document.querySelector('.upload-placeholder-cad-receita');
+                    if (preview) { preview.src = ''; preview.style.display = 'none'; }
+                    if (placeholder) placeholder.style.display = 'flex';
+                    carregarPagina('admin');
+                })
+                .catch((error) => {
+                    console.error('Erro na requisição:', error);
+                    alert(`Não foi possível cadastrar: ${error.message}`);
+                })
+                .finally(() => {
+                    if (btnSubmit) {
+                        btnSubmit.disabled = false;
+                        btnSubmit.textContent = textoOriginal;
+                    }
+                });
+        }
 
         reader.onload = (evento) => {
             // Convertendo a imagem para Base64
@@ -1422,6 +1487,16 @@ document.addEventListener('submit', function(e) {
     if (e.target.id === 'formFinalCompra') {
         e.preventDefault();
 
+        // 1. Verifica se o usuário está logado ao clicar em "Finalizar Pedido"
+        const usuarioString = localStorage.getItem('vm_usuario');
+        const logado = localStorage.getItem('vm_logado') === 'true';
+
+        if (!logado || !usuarioString) {
+            alert("Você precisa estar logado para finalizar um pedido.");
+            carregarPagina('login'); // Ou 'cadastrarCliente', se preferir
+            return;
+        }
+
         // Coletando os dados do formulário
         const form = e.target;
         const formData = new FormData(form);
@@ -1429,7 +1504,7 @@ document.addEventListener('submit', function(e) {
         const observacao = document.getElementById('observacao').value || '';
         const erroPagamentoEl = document.getElementById('erro-opcaoPagamento');
 
-        // Se não há uma opção de pagamento e mudando o text do componente
+        // Se não escolheu uma opção de pagamento
         if (!opcaoPagamento) {
             if (erroPagamentoEl) erroPagamentoEl.textContent = 'Selecione uma forma de pagamento';
             return;
@@ -1437,32 +1512,19 @@ document.addEventListener('submit', function(e) {
             erroPagamentoEl.textContent = '';
         }
 
-        console.log(`Valor enviado como opção de pagamento: ${opcaoPagamento}`);
-
-        // Pegando os dados do pedido e do usuário da memória localStorage do navegador
         const pedidoString = localStorage.getItem('vm_pedido_atual');
-        const usuarioString = localStorage.getItem('vm_usuario');
-
-        // Se não tiver pedido o fluxo é finalizado
         if (!pedidoString) return;
 
         const receita = JSON.parse(pedidoString);
-        // Variável temporária só pra teste (apagar dps)
-        let usuarioId = 1; 
-        //
-        let enderecoEntrega = 'Endereço de teste';
+        const usuario = JSON.parse(usuarioString);
 
-        // Tenta montar o endereço real se o cliente estiver logado
-        if (usuarioString) {
-            const usuario = JSON.parse(usuarioString);
-            usuarioId = usuario.id || usuario.Id || 1;
-            const rua = usuario.endereco || usuario.Endereco || '';
-            const num = usuario.numero || usuario.Numero || 'S/N';
-            const bairro = usuario.bairro || usuario.Bairro || '';
-            const cidade = usuario.cidade || usuario.Cidade || '';
-            const cep = usuario.cep || usuario.Cep || '';
-            enderecoEntrega = `${rua}, ${num} - ${bairro}, ${cidade} - CEP ${cep}`;
-        }
+        const usuarioId = usuario.id || usuario.Id;
+        const rua = usuario.endereco || usuario.Endereco || '';
+        const num = usuario.numero || usuario.Numero || 'S/N';
+        const bairro = usuario.bairro || usuario.Bairro || '';
+        const cidade = usuario.cidade || usuario.Cidade || '';
+        const cep = usuario.cep || usuario.Cep || '';
+        const enderecoEntrega = `${rua}, ${num} - ${bairro}, ${cidade} - CEP ${cep}`;
 
         // Monta o objeto respeitando a estrutura da tabela PEDIDOS definida no Supabase
         const payloadPedido = {
@@ -1667,13 +1729,13 @@ document.addEventListener('submit', function(e) {
         .then((dados) => {
             if (idEdicao) {
                 console.log('Usuario atualizado com sucesso!');
-                Alert('Conta atualizada com sucesso!');
+                alert('Conta atualizada com sucesso!');
                 // Atualizando o localStorage do usuário com os dados novos e limpando a flag
                 localStorage.setItem('vm_usuario', JSON.stringify(dadosCliente));
                 localStorage.removeItem('vm_usuario_edicao');
             } else {
                 console.log('Usuário salvo no banco com sucesso:', dados);
-                //alert('Cadastro realizado com sucesso!');
+                alert('Sua conta foi criada com sucesso!');
                 form.reset();
                 carregarPagina('login');
             }
