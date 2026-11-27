@@ -1,8 +1,10 @@
-CREATE DATABASE BonsMomentos_DataBase;
+-- =========================================================
+-- Banco de Dados: Bons Momentos (PostgreSQL / Supabase)
+-- =========================================================
 
-use BonsMomentos_DataBase;
+-- 1. Tabelas independentes
 
-CREATE TABLE public.usuarios (
+CREATE TABLE IF NOT EXISTS public.usuarios (
   id serial NOT NULL,
   nome character varying(100) NOT NULL,
   email character varying(100) NOT NULL,
@@ -20,7 +22,7 @@ CREATE TABLE public.usuarios (
   CONSTRAINT usuarios_email_key UNIQUE (email)
 ) TABLESPACE pg_default;
 
-CREATE TABLE public.receitas (
+CREATE TABLE IF NOT EXISTS public.receitas (
   id serial NOT NULL,
   nome character varying(100) NOT NULL,
   descricao text NULL,
@@ -30,7 +32,7 @@ CREATE TABLE public.receitas (
   CONSTRAINT receitas_pkey PRIMARY KEY (id)
 ) TABLESPACE pg_default;
 
-CREATE TABLE public.motoboy (
+CREATE TABLE IF NOT EXISTS public.motoboy (
   id serial NOT NULL,
   nome character varying(100) NOT NULL,
   cpf character varying(14) NOT NULL,
@@ -44,7 +46,8 @@ CREATE TABLE public.motoboy (
 ) TABLESPACE pg_default;
 
 -- 2. Tabela dependente (pedidos)
-CREATE TABLE public.pedidos (
+
+CREATE TABLE IF NOT EXISTS public.pedidos (
   id serial NOT NULL,
   id_usuario integer NOT NULL,
   id_receita integer NOT NULL,
@@ -56,9 +59,15 @@ CREATE TABLE public.pedidos (
   data_pedido timestamp without time zone NULL DEFAULT CURRENT_TIMESTAMP,
   id_motoboy integer NULL,
   CONSTRAINT pedidos_pkey PRIMARY KEY (id),
-  CONSTRAINT fk_pedido_motoboy FOREIGN KEY (id_motoboy) REFERENCES public.motoboy (id) ON DELETE SET NULL,
-  CONSTRAINT pedidos_id_receita_fkey FOREIGN KEY (id_receita) REFERENCES public.receitas (id) ON DELETE CASCADE,
-  CONSTRAINT pedidos_id_usuario_fkey FOREIGN KEY (id_usuario) REFERENCES public.usuarios (id) ON DELETE CASCADE
+  CONSTRAINT fk_pedido_motoboy FOREIGN KEY (id_motoboy)
+    REFERENCES public.motoboy (id) ON DELETE SET NULL,
+  CONSTRAINT pedidos_id_receita_fkey FOREIGN KEY (id_receita)
+    REFERENCES public.receitas (id) ON DELETE CASCADE,
+  CONSTRAINT pedidos_id_usuario_fkey FOREIGN KEY (id_usuario)
+    REFERENCES public.usuarios (id) ON DELETE CASCADE
 ) TABLESPACE pg_default;
 
-CREATE INDEX IF NOT EXISTS pedidos_motoboy_idx ON public.pedidos USING btree (id_motoboy) TABLESPACE pg_default;
+-- 3. Índices
+
+CREATE INDEX IF NOT EXISTS pedidos_motoboy_idx
+  ON public.pedidos USING btree (id_motoboy) TABLESPACE pg_default;

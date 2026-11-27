@@ -242,6 +242,13 @@
     background-color: var(--bm-terracota-escuro);
 }
 
+.compra-descricao {
+    margin-top: 6px;
+    font-size: 0.9rem;
+    color: #6b5b53;
+    line-height: 1.4;
+}
+
 /* =====================================================
    Responsivo — Dispositivos portáteis (≤ 900px)
    Empilha o resumo da compra abaixo do conteúdo principal

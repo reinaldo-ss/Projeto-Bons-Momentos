@@ -853,7 +853,8 @@ function carregarReceitas() {
                 divCard.className = 'card-receita';
                 
                 // Ao clicar, envia os dados para a função de transição
-                divCard.onclick = () => selecionarReceita(receita.id, receita.nome, receita.preco, srcImagem);
+                const descricaoReceita = receita.descricao || receita.Descricao || '';
+                divCard.onclick = () => selecionarReceita(receita.id, receita.nome, receita.preco, srcImagem, descricaoReceita);
 
                 divCard.innerHTML = `
                     <div class="card-img">
@@ -878,21 +879,18 @@ function carregarReceitas() {
 };
 
 /* Função que salva os dados da receita no localStorage do navegador */
-function selecionarReceita(id, nome, preco, foto) {
+function selecionarReceita(id, nome, preco, foto, descricao) {
     console.log(`[DEBUG] Clicou na receita: ID=${id} | Nome=${nome} | Preço=${preco}`);
 
     const receitaSelecionada = {
         id: id,
         nome: nome,
         preco: preco,
-        foto: foto
+        foto: foto,
+        descricao: descricao
     };
     
-    // Salva a receita selecionada na memória local do navegador
     localStorage.setItem('vm_pedido_atual', JSON.stringify(receitaSelecionada));
-    console.log('[DEBUG] Salvo no localStorage. Roteando para finalCompra...');
-
-    // Dispara a rota para a tela de finalizar compra
     carregarPagina('finalCompra');
 };
 
@@ -920,6 +918,10 @@ function carregarDadosFinalCompra() {
     
     document.getElementById('compra-nome').textContent = pedido.nome;
     document.getElementById('compra-preco').textContent = precoFormatado;
+    const descEl = document.getElementById('compra-descricao');
+    if (descEl) {
+        descEl.textContent = pedido.descricao || 'Sem descrição disponível.';
+    }
     document.getElementById('compra-resumo-preco').textContent = precoFormatado;
     document.getElementById('compra-total').textContent = precoFormatado;
 
